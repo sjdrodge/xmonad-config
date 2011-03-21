@@ -1,7 +1,6 @@
 import XMonad
 import XMonad.Config.Gnome
-import XMonad.Util.EZConfig
-import XMonad.Hooks.ManageHelpers
+import XMonad.Hooks.ManageHelpers(isFullscreen,doFullFloat)
 
 main = xmonad $ gnomeConfig
 	{ terminal = "xterm"
