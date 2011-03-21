@@ -2,6 +2,7 @@ import XMonad
 import XMonad.Config.Gnome(gnomeConfig)
 import XMonad.Hooks.ManageHelpers(isFullscreen,doFullFloat)
 import XMonad.Layout.NoBorders(smartBorders)
+import XMonad.Actions.UpdatePointer
 
 main = xmonad $ gnomeConfig
 	{ terminal = "xterm"
@@ -11,4 +12,7 @@ main = xmonad $ gnomeConfig
 		[ manageHook gnomeConfig
 		, isFullscreen --> doFullFloat
 		]
+	, logHook = do
+		updatePointer (TowardsCentre 0.6 0.6)
+		logHook gnomeConfig
 	}
