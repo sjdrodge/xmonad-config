@@ -1,5 +1,5 @@
 import XMonad
-import XMonad.Config.Gnome
+import XMonad.Config.Gnome(gnomeConfig)
 import XMonad.Hooks.ManageHelpers(isFullscreen,doFullFloat)
 import XMonad.Layout.NoBorders(smartBorders)
 
