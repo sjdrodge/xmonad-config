@@ -3,8 +3,8 @@ import XMonad.Config.Gnome(gnomeConfig)
 import XMonad.Util.EZConfig(additionalKeysP,removeKeysP)
 import XMonad.Hooks.ManageHelpers(isFullscreen,doFullFloat)
 import XMonad.Layout.NoBorders(smartBorders)
+import XMonad.Actions.CycleWS(prevWS,nextWS,shiftToPrev,shiftToNext)
 import XMonad.Actions.UpdatePointer
-import XMonad.Actions.CycleWS
 
 main = xmonad $ gnomeConfig
 	{ terminal = "xterm"
