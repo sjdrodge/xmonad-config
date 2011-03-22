@@ -7,26 +7,33 @@ import XMonad.Layout.NoBorders(smartBorders)
 import XMonad.Actions.CycleWS(prevWS,nextWS,shiftToPrev,shiftToNext)
 import XMonad.Actions.UpdatePointer
 
-myLayoutHook =
-	smartBorders $ desktopLayoutModifiers $ 
-	(Tall 1 0.01 0.7) ||| Full
+myTerminal = "xterm"
+myModMask = mod4Mask
+
+myLayouts = (Tall 1 0.01 0.7) ||| Full
+
+myLayoutHook = smartBorders $ desktopLayoutModifiers myLayouts
+
+myManageHook = isFullscreen --> doFullFloat
+
+myLogHook = updatePointer (TowardsCentre 0.6 0.6)
+
+myAdditionalKeysP =
+	[ ("M-<Left>", prevWS)
+        , ("M-<Right>", nextWS)
+        , ("M-S-<Left>", shiftToPrev)
+        , ("M-S-<Right>", shiftToNext)
+        ]
+
+myRemoveKeysP = ["M-S-q"]
+
 
 main = xmonad $ gnomeConfig
-	{ terminal = "xterm"
-	, modMask = mod4Mask
+	{ terminal = myTerminal
+	, modMask = myModMask
 	, layoutHook = myLayoutHook
-	, manageHook = composeAll
-		[ manageHook gnomeConfig
-		, isFullscreen --> doFullFloat
-		]
-	, logHook = do
-		updatePointer (TowardsCentre 0.6 0.6)
-		logHook gnomeConfig
+	, manageHook = myManageHook <+> manageHook gnomeConfig
+	, logHook = myLogHook >> logHook gnomeConfig
 	}
-	`additionalKeysP`
-	[ ("M-<Left>", prevWS)
-	, ("M-<Right>", nextWS)
-	, ("M-S-<Left>", shiftToPrev)
-	, ("M-S-<Right>", shiftToNext)
-	]
-	`removeKeysP` ["M-S-q"]
+	`additionalKeysP` myAdditionalKeysP
+	`removeKeysP` myRemoveKeysP
