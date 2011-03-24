@@ -23,6 +23,8 @@ myAdditionalKeysP =
         , ("M-<Right>", nextWS)
         , ("M-S-<Left>", shiftToPrev)
         , ("M-S-<Right>", shiftToNext)
+	, ("M-M1-<Left>" , shiftToPrev >> prevWS)
+	, ("M-M1-<Right>", shiftToNext >> nextWS)
         ]
 
 myRemoveKeysP = ["M-S-q"]
