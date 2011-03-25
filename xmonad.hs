@@ -5,6 +5,7 @@ import XMonad.Util.EZConfig(additionalKeys,removeKeys)
 import XMonad.Hooks.ManageHelpers(isFullscreen,doFullFloat)
 import XMonad.Layout.NoBorders(smartBorders)
 import XMonad.Actions.CycleWS(prevWS,nextWS,shiftToPrev,shiftToNext)
+import XMonad.Actions.Promote(promote)
 import XMonad.Actions.UpdatePointer
 
 myTerminal = "xterm"
@@ -22,7 +23,8 @@ myLogHook = updatePointer (TowardsCentre 0.6 0.6)
 myModMask = mod4Mask
 
 myAdditionalKeys =
-	[ ((myModMask, xK_Left), prevWS)
+	[ ((myModMask, xK_Return), promote)
+	, ((myModMask, xK_Left), prevWS)
 	, ((myModMask, xK_Right), nextWS)
 	, ((myModMask .|. shiftMask, xK_Left), shiftToPrev)
 	, ((myModMask .|. shiftMask, xK_Right), shiftToNext)
