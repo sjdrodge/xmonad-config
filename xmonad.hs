@@ -25,19 +25,19 @@ myLogHook = updatePointer (TowardsCentre 0.6 0.6)
 myModMask = mod4Mask
 
 myAdditionalKeys _ =
-	[ ((myModMask, xK_Return), promote) ]
-	++ M.assocs (planeKeys myModMask (Lines 3) Finite)
+        [ ((myModMask, xK_Return), promote) ]
+        ++ M.assocs (planeKeys myModMask (Lines 3) Finite)
 
 myRemoveKeys _ =
-	[ (myModMask .|. shiftMask, xK_q) ]
+        [ (myModMask .|. shiftMask, xK_q) ]
 
 -- End Keybindings --
 
 main = xmonad $ gnomeConfig
-	{ terminal = myTerminal
-	, modMask = myModMask
-	, keys = customKeysFrom gnomeConfig myRemoveKeys myAdditionalKeys
-	, layoutHook = myLayoutHook
-	, manageHook = myManageHook <+> manageHook gnomeConfig
-	, logHook = myLogHook >> logHook gnomeConfig
-	}
+        { terminal = myTerminal
+        , modMask = myModMask
+        , keys = customKeysFrom gnomeConfig myRemoveKeys myAdditionalKeys
+        , layoutHook = myLayoutHook
+        , manageHook = myManageHook <+> manageHook gnomeConfig
+        , logHook = myLogHook >> logHook gnomeConfig
+        }
