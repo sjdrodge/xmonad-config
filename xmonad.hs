@@ -12,6 +12,8 @@ import XMonad.Actions.Plane
 
 myTerminal = "xterm"
 
+myWorkspaces = ["1:web","2:comm","3:code","4:misc"]
+
 myLayouts = (Tall 1 0.01 0.7) ||| Full
 
 myLayoutHook = smartBorders $ desktopLayoutModifiers myLayouts
@@ -26,7 +28,7 @@ myModMask = mod4Mask
 
 myAdditionalKeys _ =
         [ ((myModMask, xK_Return), promote) ]
-        ++ M.assocs (planeKeys myModMask (Lines 3) Finite)
+        ++ M.assocs (planeKeys myModMask (Lines 2) Finite)
 
 myRemoveKeys _ =
         [ (myModMask .|. shiftMask, xK_q) ]
@@ -35,6 +37,7 @@ myRemoveKeys _ =
 
 main = xmonad $ gnomeConfig
         { terminal = myTerminal
+        , workspaces = myWorkspaces
         , modMask = myModMask
         , keys = customKeysFrom gnomeConfig myRemoveKeys myAdditionalKeys
         , layoutHook = myLayoutHook
