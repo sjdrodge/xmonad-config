@@ -7,8 +7,9 @@ import XMonad.Hooks.ManageHelpers(isFullscreen,doFullFloat)
 import XMonad.Layout.NoBorders(smartBorders)
 import XMonad.Actions.Promote(promote)
 import XMonad.Util.CustomKeys(customKeysFrom)
+import XMonad.Actions.Plane(planeKeys,Lines(Lines),Limits(Finite))
 import XMonad.Actions.UpdatePointer
-import XMonad.Actions.Plane
+    (updatePointer,PointerPosition(TowardsCentre))
 
 myTerminal = "xterm"
 
@@ -27,20 +28,20 @@ myLogHook = updatePointer (TowardsCentre 0.6 0.6)
 myModMask = mod4Mask
 
 myAdditionalKeys _ =
-        [ ((myModMask, xK_Return), promote) ]
-        ++ M.assocs (planeKeys myModMask (Lines 2) Finite)
+    [ ((myModMask, xK_Return), promote) ]
+    ++ M.assocs (planeKeys myModMask (Lines 2) Finite)
 
 myRemoveKeys _ =
-        [ (myModMask .|. shiftMask, xK_q) ]
+    [ (myModMask .|. shiftMask, xK_q) ]
 
 -- End Keybindings --
 
 main = xmonad $ gnomeConfig
-        { terminal = myTerminal
-        , workspaces = myWorkspaces
-        , modMask = myModMask
-        , keys = customKeysFrom gnomeConfig myRemoveKeys myAdditionalKeys
-        , layoutHook = myLayoutHook
-        , manageHook = myManageHook <+> manageHook gnomeConfig
-        , logHook = myLogHook >> logHook gnomeConfig
-        }
+    { terminal = myTerminal
+    , workspaces = myWorkspaces
+    , modMask = myModMask
+    , keys = customKeysFrom gnomeConfig myRemoveKeys myAdditionalKeys
+    , layoutHook = myLayoutHook
+    , manageHook = myManageHook <+> manageHook gnomeConfig
+    , logHook = myLogHook >> logHook gnomeConfig
+    }
