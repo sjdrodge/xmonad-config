@@ -11,7 +11,7 @@ import XMonad.Actions.Plane(planeKeys,Lines(Lines),Limits(Finite))
 import XMonad.Actions.UpdatePointer
     (updatePointer,PointerPosition(TowardsCentre))
 
-myTerminal = "xterm"
+myTerminal = "/home/sdrodge/bin/urxvtc-wrapper.sh"
 
 myWorkspaces = ["1:web","2:comm","3:code","4:misc"]
 
