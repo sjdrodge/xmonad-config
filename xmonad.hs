@@ -15,7 +15,7 @@ import XMonad.Actions.Plane(planeKeys,Lines(Lines),Limits(Finite))
 import XMonad.Actions.UpdatePointer
     (updatePointer,PointerPosition(TowardsCentre))
 
-myTerminal = "/home/sdrodge/bin/urxvtc-wrapper.sh"
+myTerminal = "~/bin/urxvtc-wrapper.sh"
 
 myManageHook = composeAll
     [ insertPosition End Newer
