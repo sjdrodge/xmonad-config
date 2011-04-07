@@ -1,6 +1,7 @@
 import qualified Data.Map as M
 
 import XMonad
+import qualified XMonad.StackSet as W
 import XMonad.Config.Desktop(desktopLayoutModifiers)
 import XMonad.Config.Gnome(gnomeConfig)
 import XMonad.Hooks.ManageHelpers(isFullscreen,doFullFloat)
@@ -20,6 +21,7 @@ myTerminal = "~/bin/urxvtc-wrapper.sh"
 myManageHook = composeAll
     [ insertPosition End Newer
     , isFullscreen --> doFullFloat
+    , className =? "Pidgin" --> doF (W.shift "comm")
     ]
 
 myLogHook = updatePointer (TowardsCentre 0.6 0.6)
