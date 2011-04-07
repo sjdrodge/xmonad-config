@@ -4,6 +4,7 @@ import XMonad
 import XMonad.Config.Desktop(desktopLayoutModifiers)
 import XMonad.Config.Gnome(gnomeConfig)
 import XMonad.Hooks.ManageHelpers(isFullscreen,doFullFloat)
+import XMonad.Hooks.InsertPosition(insertPosition,Focus(Newer),Position(End))
 import XMonad.Layout.NoBorders(smartBorders)
 import XMonad.Layout.Reflect(reflectHoriz)
 import XMonad.Layout.IM(withIM,Property(ClassName,And,Role))
@@ -16,7 +17,10 @@ import XMonad.Actions.UpdatePointer
 
 myTerminal = "/home/sdrodge/bin/urxvtc-wrapper.sh"
 
-myManageHook = isFullscreen --> doFullFloat
+myManageHook = composeAll
+    [ insertPosition End Newer
+    , isFullscreen --> doFullFloat
+    ]
 
 myLogHook = updatePointer (TowardsCentre 0.6 0.6)
 
