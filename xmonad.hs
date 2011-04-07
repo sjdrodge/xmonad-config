@@ -5,23 +5,33 @@ import XMonad.Config.Desktop(desktopLayoutModifiers)
 import XMonad.Config.Gnome(gnomeConfig)
 import XMonad.Hooks.ManageHelpers(isFullscreen,doFullFloat)
 import XMonad.Layout.NoBorders(smartBorders)
-import XMonad.Actions.Promote(promote)
+import XMonad.Layout.Reflect(reflectHoriz)
+import XMonad.Layout.IM(withIM,Property(ClassName,And,Role))
+import XMonad.Layout.PerWorkspace(onWorkspace)
 import XMonad.Util.CustomKeys(customKeysFrom)
+import XMonad.Actions.Promote(promote)
 import XMonad.Actions.Plane(planeKeys,Lines(Lines),Limits(Finite))
 import XMonad.Actions.UpdatePointer
     (updatePointer,PointerPosition(TowardsCentre))
 
 myTerminal = "/home/sdrodge/bin/urxvtc-wrapper.sh"
 
-myWorkspaces = ["1:web","2:comm","3:code","4:misc"]
-
-myLayouts = (Tall 1 0.01 0.7) ||| Full
-
-myLayoutHook = smartBorders $ desktopLayoutModifiers myLayouts
-
 myManageHook = isFullscreen --> doFullFloat
 
 myLogHook = updatePointer (TowardsCentre 0.6 0.6)
+
+-- Workspaces & Layouts --
+
+myWorkspaces = ["web","comm","code","misc"]
+
+myCommLayout = reflectHoriz $
+    withIM (0.25) (ClassName "Pidgin" `And` Role "buddy_list")
+    (Mirror $ Tall 1 0.01 0.5)
+
+myLayouts = onWorkspace "comm" myCommLayout $
+            (Tall 1 0.01 0.7) ||| Full
+
+myLayoutHook = smartBorders $ desktopLayoutModifiers myLayouts
 
 -- Keybindings --
 
@@ -34,7 +44,7 @@ myAdditionalKeys _ =
 myRemoveKeys _ =
     [ (myModMask .|. shiftMask, xK_q) ]
 
--- End Keybindings --
+-- Apply settings --
 
 main = xmonad $ gnomeConfig
     { terminal = myTerminal
