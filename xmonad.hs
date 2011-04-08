@@ -91,7 +91,7 @@ myPrettyPrinter dbus = defaultPP {
   , ppCurrent = pangoColor "green" . wrap "[" "]" . pangoSanitize
   , ppVisible = wrap "(" ")" . pangoSanitize
   , ppHidden  = wrap " " " "
-  , ppLayout  = pangoColor "#FF0000" . pangoSanitize
+  , ppLayout  = pangoColor "white" . pangoSanitize
   , ppUrgent  = pangoColor "red"
   }
 
