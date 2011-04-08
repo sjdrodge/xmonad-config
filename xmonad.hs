@@ -87,12 +87,12 @@ main = do
 myPrettyPrinter :: Connection -> PP
 myPrettyPrinter dbus = defaultPP {
     ppOutput  = outputThroughDBus dbus
-  , ppTitle   = shorten 50 . pangoSanitize
+  , ppTitle   = shorten 80 . pangoSanitize
   , ppCurrent = pangoColor "green" . wrap "[" "]" . pangoSanitize
-  , ppVisible = wrap "(" ")" . pangoSanitize
-  , ppHidden  = wrap " " " "
+  , ppVisible = const ""
+  , ppHidden  = const ""
   , ppLayout  = pangoColor "white" . pangoSanitize
-  , ppUrgent  = pangoColor "red"
+  , ppUrgent  = pangoColor "red" -- is currently useless due to ppHidden
   }
 
 getWellKnownName :: Connection -> IO ()
