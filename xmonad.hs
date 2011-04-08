@@ -19,8 +19,8 @@ import XMonad.Actions.UpdatePointer
 myTerminal = "~/bin/urxvtc-wrapper.sh"
 
 myManageHook = composeAll
-    [ insertPosition End Newer
-    , isFullscreen --> doFullFloat
+    [ isFullscreen --> doFullFloat
+    , insertPosition End Newer
     , className =? "Pidgin" --> doF (W.shift "comm")
     ]
 
