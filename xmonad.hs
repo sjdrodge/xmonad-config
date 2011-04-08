@@ -1,3 +1,17 @@
+-- The DBus-related code, and the xmonad log applet that it's intended to be
+-- used with, were originally authored by Adam Wick.
+-- (see http://uhsure.com/xmonad-log-applet.html for more details)
+
+-- DBus imports --
+
+import Control.OldException(catchDyn,try)
+import DBus
+import DBus.Connection
+import DBus.Message
+import XMonad.Hooks.DynamicLog(wrap,shorten,defaultPP,dynamicLogWithPP,PP(..))
+
+-- Regular imports --
+
 import qualified Data.Map as M
 import Control.Monad(liftM)
 
@@ -24,7 +38,10 @@ myManageHook = composeAll
     , className =? "Pidgin" --> doShift "comm"
     ]
 
-myLogHook = updatePointer (TowardsCentre 0.6 0.6)
+myLogHook :: Connection -> X ()
+myLogHook dbus = do
+    dynamicLogWithPP (myPrettyPrinter dbus)
+    updatePointer (TowardsCentre 0.6 0.6)
 
 -- Workspaces & Layouts --
 
@@ -52,12 +69,61 @@ myRemoveKeys _ =
 
 -- Apply settings --
 
-main = xmonad $ gnomeConfig
-    { terminal = myTerminal
-    , workspaces = myWorkspaces
-    , modMask = myModMask
-    , keys = customKeysFrom gnomeConfig myRemoveKeys myAdditionalKeys
-    , layoutHook = myLayoutHook
-    , manageHook = myManageHook <+> manageHook gnomeConfig
-    , logHook = myLogHook >> logHook gnomeConfig
+main = do
+    dbus <- busGet Session
+    getWellKnownName dbus
+    xmonad $ gnomeConfig
+        { terminal = myTerminal
+        , workspaces = myWorkspaces
+        , modMask = myModMask
+        , keys = customKeysFrom gnomeConfig myRemoveKeys myAdditionalKeys
+        , layoutHook = myLayoutHook
+        , manageHook = myManageHook <+> manageHook gnomeConfig
+        , logHook = myLogHook dbus >> logHook gnomeConfig
     }
+
+-- DBus stuff --
+
+myPrettyPrinter :: Connection -> PP
+myPrettyPrinter dbus = defaultPP {
+    ppOutput  = outputThroughDBus dbus
+  , ppTitle   = shorten 50 . pangoSanitize
+  , ppCurrent = pangoColor "green" . wrap "[" "]" . pangoSanitize
+  , ppVisible = wrap "(" ")" . pangoSanitize
+  , ppHidden  = wrap " " " "
+  , ppLayout  = pangoColor "#FF0000" . pangoSanitize
+  , ppUrgent  = pangoColor "red"
+  }
+
+getWellKnownName :: Connection -> IO ()
+getWellKnownName dbus = tryGetName `catchDyn`
+    (\ (DBus.Error _ _) -> getWellKnownName dbus)
+    where
+        tryGetName = do
+            namereq <-
+                newMethodCall serviceDBus pathDBus interfaceDBus "RequestName"
+            addArgs namereq [String "org.xmonad.Log", Word32 5]
+            sendWithReplyAndBlock dbus namereq 0
+            return ()
+
+outputThroughDBus :: Connection -> String -> IO ()
+outputThroughDBus dbus str = do
+    msg <- newSignal "/org/xmonad/Log" "org.xmonad.Log" "Update"
+    addArgs msg [String str]
+    send dbus msg 0 `catchDyn` (\ (DBus.Error _ _ ) -> return 0)
+    return ()
+
+pangoColor :: String -> String -> String
+pangoColor fg = wrap left right
+    where
+        left  = "<span font_weight=\"bold\" foreground=\"" ++ fg ++ "\">"
+        right = "</span>"
+
+pangoSanitize :: String -> String
+pangoSanitize = foldr sanitize ""
+    where
+        sanitize '>'  acc = "&gt;" ++ acc
+        sanitize '<'  acc = "&lt;" ++ acc
+        sanitize '\"' acc = "&quot;" ++ acc
+        sanitize '&'  acc = "&amp;" ++ acc
+        sanitize x    acc = x:acc
