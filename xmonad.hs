@@ -2,24 +2,16 @@
 -- used with, were originally authored by Adam Wick.
 -- (see http://uhsure.com/xmonad-log-applet.html for more details)
 
--- DBus imports --
-
-import Control.OldException(catchDyn,try)
-import DBus
-import DBus.Connection
-import DBus.Message
-import XMonad.Hooks.DynamicLog(wrap,shorten,defaultPP,dynamicLogWithPP,PP(..))
-
--- Regular imports --
-
 import qualified Data.Map as M
 import Control.Monad(liftM)
+import Control.OldException(catchDyn)
 
 import XMonad
 import XMonad.Config.Desktop(desktopLayoutModifiers)
 import XMonad.Config.Gnome(gnomeConfig)
 import XMonad.Hooks.ManageHelpers(isDialog,isFullscreen,doFullFloat)
 import XMonad.Hooks.InsertPosition(insertPosition,Focus(Newer),Position(End))
+import XMonad.Hooks.DynamicLog(wrap,shorten,defaultPP,dynamicLogWithPP,PP(..))
 import XMonad.Layout.NoBorders(smartBorders)
 import XMonad.Layout.Reflect(reflectHoriz)
 import XMonad.Layout.IM(withIM,Property(ClassName,And,Role))
@@ -29,6 +21,12 @@ import XMonad.Actions.Promote(promote)
 import XMonad.Actions.Plane(planeKeys,Lines(Lines),Limits(Finite))
 import XMonad.Actions.UpdatePointer
     (updatePointer,PointerPosition(TowardsCentre))
+
+import DBus(serviceDBus,pathDBus,interfaceDBus,Error(Error))
+import DBus.Message(newSignal,newMethodCall,addArgs,Message,Arg(..))
+import DBus.Connection
+    (busGet,send,sendWithReplyAndBlock,Connection,BusType(Session))
+
 
 myTerminal = "~/bin/urxvtc-wrapper.sh"
 
