@@ -6,6 +6,7 @@ import XMonad.Config.Desktop(desktopLayoutModifiers)
 import XMonad.Config.Gnome(gnomeConfig)
 import XMonad.Hooks.ManageHelpers(isDialog,isFullscreen,doFullFloat)
 import XMonad.Hooks.InsertPosition(insertPosition,Focus(Newer),Position(End))
+import XMonad.Hooks.Place(placeHook,inBounds,smart,Placement)
 import XMonad.Layout.NoBorders(smartBorders)
 import XMonad.Layout.Reflect(reflectHoriz)
 import XMonad.Layout.IM(withIM,Property(ClassName,And,Role))
@@ -21,6 +22,7 @@ myTerminal = "~/bin/urxvtc-wrapper.sh"
 myManageHook = composeAll
     [ isFullscreen --> doFullFloat
     , liftM not isDialog --> insertPosition End Newer
+    , placeHook $ inBounds $ smart (0.5,0.5)
     , className =? "Pidgin" --> doShift "comm"
     ]
 
