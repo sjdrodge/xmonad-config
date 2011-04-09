@@ -69,7 +69,7 @@ myRemoveKeys _ =
 
 main = do
     dbus <- busGet Session
-    getWellKnownName dbus
+    getWellKnownName dbus "org.xmonad.Log"
     xmonad $ gnomeConfig
         { terminal = myTerminal
         , workspaces = myWorkspaces
@@ -93,17 +93,21 @@ myPrettyPrinter dbus = defaultPP {
   , ppUrgent  = pangoColor "red" -- is currently useless due to ppHidden
   }
 
-getWellKnownName :: Connection -> IO ()
-getWellKnownName dbus = tryGetName `catchDyn`
-    (\ (DBus.Error _ _) -> getWellKnownName dbus)
+
+-- see: DBus.Connection.busRequestName as a replacement for this
+-- TODO: get rid of catchDyn
+getWellKnownName :: Connection -> String -> IO ()
+getWellKnownName dbus name = tryGetName `catchDyn`
+    (\ (DBus.Error _ _) -> getWellKnownName dbus name)
     where
         tryGetName = do
             namereq <-
                 newMethodCall serviceDBus pathDBus interfaceDBus "RequestName"
-            addArgs namereq [String "org.xmonad.Log", Word32 5]
+            addArgs namereq [String name, Word32 5]
             sendWithReplyAndBlock dbus namereq 0
             return ()
 
+-- TODO: get rid of catchDyn
 outputThroughDBus :: Connection -> String -> IO ()
 outputThroughDBus dbus str = do
     msg <- newSignal "/org/xmonad/Log" "org.xmonad.Log" "Update"
@@ -111,6 +115,9 @@ outputThroughDBus dbus str = do
     send dbus msg 0 `catchDyn` (\ (DBus.Error _ _ ) -> return 0)
     return ()
 
+
+-- Pango stuff --
+-- see: Graphics.Rendering.Pango as a replacement
 pangoColor :: String -> String -> String
 pangoColor fg = wrap left right
     where
