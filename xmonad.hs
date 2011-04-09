@@ -24,8 +24,7 @@ import XMonad.Actions.UpdatePointer
 
 import DBus(serviceDBus,pathDBus,interfaceDBus,Error(Error))
 import DBus.Message(newSignal,newMethodCall,addArgs,Message,Arg(..))
-import DBus.Connection
-    (busGet,send,sendWithReplyAndBlock,Connection,BusType(Session))
+import DBus.Connection(busGet,busRequestName,send,Connection,BusType(Session))
 
 
 myTerminal = "~/bin/urxvtc-wrapper.sh"
@@ -69,7 +68,7 @@ myRemoveKeys _ =
 
 main = do
     dbus <- busGet Session
-    getWellKnownName dbus "org.xmonad.Log"
+    busRequestName dbus "org.xmonad.Log" [] --TODO: Exception Handling?
     xmonad $ gnomeConfig
         { terminal = myTerminal
         , workspaces = myWorkspaces
@@ -92,20 +91,6 @@ myPrettyPrinter dbus = defaultPP {
   , ppLayout  = pangoColor "white" . pangoSanitize
   , ppUrgent  = pangoColor "red" -- is currently useless due to ppHidden
   }
-
-
--- see: DBus.Connection.busRequestName as a replacement for this
--- TODO: get rid of catchDyn
-getWellKnownName :: Connection -> String -> IO ()
-getWellKnownName dbus name = tryGetName `catchDyn`
-    (\ (DBus.Error _ _) -> getWellKnownName dbus name)
-    where
-        tryGetName = do
-            namereq <-
-                newMethodCall serviceDBus pathDBus interfaceDBus "RequestName"
-            addArgs namereq [String name, Word32 5]
-            sendWithReplyAndBlock dbus namereq 0
-            return ()
 
 -- TODO: get rid of catchDyn
 outputThroughDBus :: Connection -> String -> IO ()
