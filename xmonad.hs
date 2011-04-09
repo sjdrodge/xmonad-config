@@ -4,7 +4,6 @@
 
 import qualified Data.Map as M
 import Control.Monad(liftM)
-import Control.OldException(catchDyn)
 
 import XMonad
 import XMonad.Config.Desktop(desktopLayoutModifiers)
@@ -62,6 +61,13 @@ myPrettyPrinter dbus = defaultPP {
   , ppUrgent  = const ""
   }
 
+outputThroughDBus :: Connection -> String -> IO ()
+outputThroughDBus dbus str = do
+    msg <- newSignal "/org/xmonad/Log" "org.xmonad.Log" "Update"
+    addArgs msg [String str]
+    send dbus msg 0 --TODO: Exception Handling?
+    return ()
+
 -- Workspaces & Layouts --
 
 myWorkspaces = ["web","comm","code","misc"]
@@ -89,7 +95,7 @@ myRemoveKeys _ =
 -- Apply settings --
 
 main = do
-    dbus <- busGet Session
+    dbus <- busGet Session --TODO: Exception Handling?
     busRequestName dbus "org.xmonad.Log" [] --TODO: Exception Handling?
     xmonad $ gnomeConfig
         { terminal = myTerminal
@@ -100,12 +106,3 @@ main = do
         , manageHook = myManageHook <+> manageHook gnomeConfig
         , logHook = myLogHook dbus >> logHook gnomeConfig
     }
-
--- DBus stuff --
--- TODO: get rid of catchDyn
-outputThroughDBus :: Connection -> String -> IO ()
-outputThroughDBus dbus str = do
-    msg <- newSignal "/org/xmonad/Log" "org.xmonad.Log" "Update"
-    addArgs msg [String str]
-    send dbus msg 0 `catchDyn` (\ (DBus.Error _ _ ) -> return 0)
-    return ()
