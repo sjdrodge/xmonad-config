@@ -22,7 +22,7 @@ myTerminal = "~/bin/urxvtc-wrapper.sh"
 myManageHook = composeAll
     [ isFullscreen --> doFullFloat
     , liftM not isDialog --> insertPosition End Newer
-    , placeHook $ inBounds $ smart (0.5,0.5)
+    , liftM not isDialog --> (placeHook $ inBounds $ smart (0.5,0.5))
     , className =? "Pidgin" --> doShift "comm"
     ]
 
