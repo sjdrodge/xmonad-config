@@ -26,6 +26,9 @@ import DBus(serviceDBus,pathDBus,interfaceDBus,Error(Error))
 import DBus.Message(newSignal,newMethodCall,addArgs,Message,Arg(..))
 import DBus.Connection(busGet,busRequestName,send,Connection,BusType(Session))
 
+import Graphics.Rendering.Pango.Enums(Weight(..))
+import Graphics.Rendering.Pango.Markup(markSpan,SpanAttribute(..))
+import Graphics.Rendering.Pango.Layout(escapeMarkup)
 
 myTerminal = "~/bin/urxvtc-wrapper.sh"
 
@@ -35,10 +38,29 @@ myManageHook = composeAll
     , className =? "Pidgin" --> doShift "comm"
     ]
 
+-- logHook & Pretty Printer --
+
 myLogHook :: Connection -> X ()
 myLogHook dbus = do
     dynamicLogWithPP (myPrettyPrinter dbus)
     updatePointer (TowardsCentre 0.6 0.6)
+
+myPrettyPrinter :: Connection -> PP
+myPrettyPrinter dbus = defaultPP {
+    ppOutput  = outputThroughDBus dbus
+  , ppTitle   = escapeMarkup . shorten 80
+  , ppCurrent = markSpan
+        [ FontWeight WeightBold
+        , FontForeground "green"
+        ] . escapeMarkup
+  , ppVisible = const ""
+  , ppHidden  = const ""
+  , ppLayout  = markSpan
+        [ FontWeight WeightBold
+        , FontForeground "white"
+        ] . escapeMarkup
+  , ppUrgent  = const ""
+  }
 
 -- Workspaces & Layouts --
 
@@ -80,18 +102,6 @@ main = do
     }
 
 -- DBus stuff --
-
-myPrettyPrinter :: Connection -> PP
-myPrettyPrinter dbus = defaultPP {
-    ppOutput  = outputThroughDBus dbus
-  , ppTitle   = shorten 80 . pangoSanitize
-  , ppCurrent = pangoColor "green" . wrap "[" "]" . pangoSanitize
-  , ppVisible = const ""
-  , ppHidden  = const ""
-  , ppLayout  = pangoColor "white" . pangoSanitize
-  , ppUrgent  = pangoColor "red" -- is currently useless due to ppHidden
-  }
-
 -- TODO: get rid of catchDyn
 outputThroughDBus :: Connection -> String -> IO ()
 outputThroughDBus dbus str = do
@@ -99,21 +109,3 @@ outputThroughDBus dbus str = do
     addArgs msg [String str]
     send dbus msg 0 `catchDyn` (\ (DBus.Error _ _ ) -> return 0)
     return ()
-
-
--- Pango stuff --
--- see: Graphics.Rendering.Pango as a replacement
-pangoColor :: String -> String -> String
-pangoColor fg = wrap left right
-    where
-        left  = "<span font_weight=\"bold\" foreground=\"" ++ fg ++ "\">"
-        right = "</span>"
-
-pangoSanitize :: String -> String
-pangoSanitize = foldr sanitize ""
-    where
-        sanitize '>'  acc = "&gt;" ++ acc
-        sanitize '<'  acc = "&lt;" ++ acc
-        sanitize '\"' acc = "&quot;" ++ acc
-        sanitize '&'  acc = "&amp;" ++ acc
-        sanitize x    acc = x:acc
