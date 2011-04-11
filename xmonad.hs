@@ -15,6 +15,7 @@ import XMonad.Layout.NoBorders(smartBorders)
 import XMonad.Layout.Reflect(reflectHoriz)
 import XMonad.Layout.IM(withIM,Property(ClassName,And,Role))
 import XMonad.Layout.PerWorkspace(onWorkspace)
+import XMonad.Layout.Named(named)
 import XMonad.Util.CustomKeys(customKeysFrom)
 import XMonad.Actions.Promote(promote)
 import XMonad.Actions.Plane(planeKeys,Lines(Lines),Limits(Finite))
@@ -34,7 +35,7 @@ myTerminal = "~/bin/urxvtc-wrapper.sh"
 myManageHook = composeAll
     [ isFullscreen --> doFullFloat
     , liftM not isDialog --> insertPosition End Newer
-    , className =? "Pidgin" --> doShift "comm"
+    , className =? "Pidgin" --> doShift "Comm"
     ]
 
 -- logHook & Pretty Printer --
@@ -70,13 +71,13 @@ outputThroughDBus dbus str = do
 
 -- Workspaces & Layouts --
 
-myWorkspaces = ["web","comm","code","misc"]
+myWorkspaces = ["Web","Comm","Code","Misc"]
 
 myCommLayout = reflectHoriz $
     withIM (0.25) (ClassName "Pidgin" `And` Role "buddy_list")
     (Mirror $ Tall 1 0.01 0.5)
 
-myLayouts = onWorkspace "comm" myCommLayout $
+myLayouts = onWorkspace "Comm" (named "Comm" myCommLayout) $
             (Tall 1 0.01 0.7) ||| Full
 
 myLayoutHook = smartBorders $ desktopLayoutModifiers myLayouts
