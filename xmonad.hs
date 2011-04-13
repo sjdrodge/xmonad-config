@@ -46,21 +46,21 @@ myLogHook dbus = do
     updatePointer (TowardsCentre 0.6 0.6)
 
 myPrettyPrinter :: Connection -> PP
-myPrettyPrinter dbus = defaultPP {
-    ppOutput  = outputThroughDBus dbus
-  , ppTitle   = escapeMarkup . shorten 80
-  , ppCurrent = markSpan
+myPrettyPrinter dbus = defaultPP
+    { ppOutput  = outputThroughDBus dbus
+    , ppTitle   = escapeMarkup . shorten 80
+    , ppCurrent = markSpan
         [ FontWeight WeightBold
         , FontForeground "green"
         ] . escapeMarkup
-  , ppVisible = const ""
-  , ppHidden  = const ""
-  , ppLayout  = markSpan
+    , ppVisible = const ""
+    , ppHidden  = const ""
+    , ppLayout  = markSpan
         [ FontWeight WeightBold
         , FontForeground "white"
         ] . escapeMarkup
-  , ppUrgent  = const ""
-  }
+    , ppUrgent  = const ""
+    }
 
 outputThroughDBus :: Connection -> String -> IO ()
 outputThroughDBus dbus str = do
@@ -106,4 +106,4 @@ main = do
         , layoutHook = myLayoutHook
         , manageHook = myManageHook <+> manageHook gnomeConfig
         , logHook = myLogHook dbus >> logHook gnomeConfig
-    }
+        }
