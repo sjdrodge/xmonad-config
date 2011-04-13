@@ -17,6 +17,7 @@ import XMonad.Layout.IM(withIM,Property(ClassName,And,Role))
 import XMonad.Layout.PerWorkspace(onWorkspace)
 import XMonad.Layout.Named(named)
 import XMonad.Layout.FixedColumn(FixedColumn(..))
+import XMonad.Layout.Grid(Grid(Grid))
 import XMonad.Util.CustomKeys(customKeysFrom)
 import XMonad.Actions.Promote(promote)
 import XMonad.Actions.Plane(planeKeys,Lines(Lines),Limits(Finite))
@@ -74,15 +75,22 @@ outputThroughDBus dbus str = do
 
 myWorkspaces = ["Web","Comm","Code","Misc"]
 
+myWebLayouts = Tall 1 0.01 0.7
+
 myCommLayouts = named "Comm" $ reflectHoriz $
     withIM (0.25) (ClassName "Pidgin" `And` Role "buddy_list")
            (Mirror $ Tall 1 0.01 0.5)
 
-myCodeLayouts = (named "Code" $ reflectHoriz (FixedColumn 1 5 80 6)) ||| Full
+myCodeLayouts = named "Code" $ reflectHoriz (FixedColumn 1 5 80 6)
 
-myLayouts = onWorkspace "Comm" myCommLayouts $
-            onWorkspace "Code" myCodeLayouts $
-            (Tall 1 0.01 0.7) ||| Full
+myMiscLayouts = myWebLayouts ||| Grid
+
+myLayouts =
+    ( onWorkspace "Web" myWebLayouts
+    $ onWorkspace "Comm" myCommLayouts
+    $ onWorkspace "Code" myCodeLayouts
+    $ myMiscLayouts
+    ) ||| Full
 
 myLayoutHook = smartBorders $ desktopLayoutModifiers myLayouts
 
