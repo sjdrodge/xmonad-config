@@ -50,7 +50,7 @@ myLogHook dbus = do
 myPrettyPrinter :: Connection -> PP
 myPrettyPrinter dbus = defaultPP
     { ppOutput  = outputThroughDBus dbus
-    , ppTitle   = escapeMarkup . shorten 80
+    , ppTitle   = escapeMarkup
     , ppCurrent = markSpan
         [ FontWeight WeightBold
         , FontForeground "green"
