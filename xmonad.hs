@@ -31,7 +31,7 @@ import Graphics.Rendering.Pango.Enums(Weight(..))
 import Graphics.Rendering.Pango.Markup(markSpan,SpanAttribute(..))
 import Graphics.Rendering.Pango.Layout(escapeMarkup)
 
-myTerminal = "~/bin/urxvtc-wrapper.sh"
+myTerminal = "urxvtcd"
 
 myManageHook = composeAll
     [ isFullscreen --> doFullFloat
