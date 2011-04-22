@@ -2,7 +2,7 @@
 -- used with, were originally authored by Adam Wick.
 -- (see http://uhsure.com/xmonad-log-applet.html for more details)
 
-import qualified Data.Map as M
+import qualified Data.Map as M(assocs)
 import Control.Monad(liftM)
 
 import XMonad
@@ -73,7 +73,7 @@ outputThroughDBus dbus str = do
 
 -- Workspaces & Layouts --
 
-myWorkspaces = ["Web","Comm","Code","Misc"]
+myWorkspaces = ["Web", "Comm", "Code", "Misc"]
 
 myWebLayouts = Tall 1 0.01 0.7
 
