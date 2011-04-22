@@ -1,8 +1,5 @@
--- The DBus-related code, and the xmonad log applet that it's intended to be
--- used with, were originally authored by Adam Wick.
--- (see http://uhsure.com/xmonad-log-applet.html for more details)
-
 import qualified Data.Map as M(assocs)
+import Data.String(fromString)
 import Control.Monad(liftM)
 
 import XMonad
@@ -24,9 +21,10 @@ import XMonad.Actions.Plane(planeKeys,Lines(Lines),Limits(Finite))
 import XMonad.Actions.UpdatePointer
     (updatePointer,PointerPosition(TowardsCentre))
 
-import DBus(serviceDBus,pathDBus,interfaceDBus,Error(Error))
-import DBus.Message(newSignal,newMethodCall,addArgs,Message,Arg(..))
-import DBus.Connection(busGet,busRequestName,send,Connection,BusType(Session))
+import DBus.Types(toVariant)
+import DBus.Bus(getSessionBus)
+import DBus.Message(Signal(..))
+import DBus.Client(send_,newClient,runDBus,Client,DBus)
 
 import Graphics.Rendering.Pango.Enums(Weight(..))
 import Graphics.Rendering.Pango.Markup(markSpan,SpanAttribute(..))
@@ -42,14 +40,14 @@ myManageHook = composeAll
 
 -- logHook & Pretty Printer --
 
-myLogHook :: Connection -> X ()
-myLogHook dbus = do
-    dynamicLogWithPP (myPrettyPrinter dbus)
+myLogHook :: Client -> X ()
+myLogHook client = do
+    dynamicLogWithPP (myPrettyPrinter client)
     updatePointer (TowardsCentre 0.6 0.6)
 
-myPrettyPrinter :: Connection -> PP
-myPrettyPrinter dbus = defaultPP
-    { ppOutput  = outputThroughDBus dbus
+myPrettyPrinter :: Client -> PP
+myPrettyPrinter client = defaultPP
+    { ppOutput  = runDBus client . sendUpdateSignal
     , ppTitle   = escapeMarkup
     , ppCurrent = markSpan
         [ FontWeight WeightBold
@@ -64,12 +62,14 @@ myPrettyPrinter dbus = defaultPP
     , ppUrgent  = const ""
     }
 
-outputThroughDBus :: Connection -> String -> IO ()
-outputThroughDBus dbus str = do
-    msg <- newSignal "/org/xmonad/Log" "org.xmonad.Log" "Update"
-    addArgs msg [String str]
-    send dbus msg 0 --TODO: Exception Handling?
-    return ()
+sendUpdateSignal :: String -> DBus ()
+sendUpdateSignal output = send_ Signal
+    { signalPath = fromString "/org/xmonad/Log"
+    , signalMember = fromString "Update"
+    , signalInterface = fromString "org.xmonad.Log"
+    , signalDestination = Nothing
+    , signalBody = [toVariant output]
+    }
 
 -- Workspaces & Layouts --
 
@@ -108,8 +108,7 @@ myRemoveKeys _ =
 -- Apply settings --
 
 main = do
-    dbus <- busGet Session --TODO: Exception Handling?
-    busRequestName dbus "org.xmonad.Log" [] --TODO: Exception Handling?
+    dbusClient <- newClient =<< getSessionBus
     xmonad $ gnomeConfig
         { terminal = myTerminal
         , workspaces = myWorkspaces
@@ -117,5 +116,5 @@ main = do
         , keys = customKeysFrom gnomeConfig myRemoveKeys myAdditionalKeys
         , layoutHook = myLayoutHook
         , manageHook = myManageHook <+> manageHook gnomeConfig
-        , logHook = myLogHook dbus >> logHook gnomeConfig
+        , logHook = myLogHook dbusClient >> logHook gnomeConfig
         }
