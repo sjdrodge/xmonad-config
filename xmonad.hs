@@ -1,5 +1,6 @@
 import qualified Data.Map as M(assocs)
 import Data.String(fromString)
+import qualified Data.Text.Lazy.Encoding as TL(decodeUtf8)
 import Control.Monad(liftM)
 
 import XMonad
@@ -68,7 +69,7 @@ sendUpdateSignal output = send_ Signal
     , signalMember = fromString "Update"
     , signalInterface = fromString "org.xmonad.Log"
     , signalDestination = Nothing
-    , signalBody = [toVariant output]
+    , signalBody = [toVariant (TL.decodeUtf8 (fromString output))]
     }
 
 -- Workspaces & Layouts --
