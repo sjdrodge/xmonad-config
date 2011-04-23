@@ -89,7 +89,7 @@ myCommLayouts = named "Comm" $ reflectHoriz $
     withIM (0.25) (ClassName "Pidgin" `And` Role "buddy_list")
            (Mirror $ Tall 1 0.01 0.5)
 
-myCodeLayouts = named "Code" $ reflectHoriz (FixedColumn 1 5 80 6)
+myCodeLayouts = named "Code" $ reflectHoriz (FixedColumn 1 1 80 30)
 
 myMiscLayouts = myWebLayouts ||| Grid
 
