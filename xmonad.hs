@@ -46,8 +46,8 @@ myManageHook = composeAll
     , className =? "Pidgin" --> doShift "Comm"
     ]
 
--- logHook & Pretty Printer --
 
+-- logHook & Pretty Printer --
 myLogHook :: Client -> X ()
 myLogHook client = do
     dynamicLogWithPP (myPrettyPrinter client)
@@ -79,8 +79,8 @@ sendUpdateSignal output = send_ Signal
     , signalBody = [toVariant (TL.decodeUtf8 (fromString output))]
     }
 
--- Workspaces & Layouts --
 
+-- Workspaces & Layouts --
 myWorkspaces = ["Web", "Comm", "Code", "Misc"]
 
 myWebLayouts = Tall 1 0.01 0.7
@@ -102,8 +102,8 @@ myLayouts =
 
 myLayoutHook = smartBorders $ desktopLayoutModifiers myLayouts
 
--- Keybindings --
 
+-- Keybindings --
 myModMask = mod4Mask
 
 myAdditionalKeys _ =
@@ -113,8 +113,8 @@ myAdditionalKeys _ =
 myRemoveKeys _ =
     [ (myModMask .|. shiftMask, xK_q) ]
 
--- Apply settings --
 
+-- Apply settings --
 main = do
     dbusClient <- newClient =<< getSessionBus
     xmonad $ gnomeConfig
