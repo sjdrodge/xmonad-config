@@ -1,3 +1,10 @@
+-- This configuration is intended to be used with the XMonad Statusbar Applet
+-- available at <https://github.com/tehminkeh/xmonad-statusbar-applet>.
+-- It also requires the following Haskell packages:
+-- dbus-core: <http://hackage.haskell.org/package/dbus-core>
+-- dbus-client: <http://hackage.haskell.org/package/dbus-client>
+-- pango: <http://hackage.haskell.org/package/pango>
+
 import qualified Data.Map as M(assocs)
 import Data.String(fromString)
 import qualified Data.Text.Lazy.Encoding as TL(decodeUtf8)
