@@ -16,6 +16,7 @@ import XMonad.Config.Gnome(gnomeConfig)
 import XMonad.Hooks.ManageHelpers(isDialog,isFullscreen,doFullFloat)
 import XMonad.Hooks.InsertPosition(insertPosition,Focus(Newer),Position(End))
 import XMonad.Hooks.DynamicLog(defaultPP,dynamicLogWithPP,PP(..))
+import XMonad.Hooks.UrgencyHook(withUrgencyHook,NoUrgencyHook(..))
 import XMonad.Layout.NoBorders(smartBorders)
 import XMonad.Layout.Reflect(reflectHoriz)
 import XMonad.Layout.IM(withIM,Property(ClassName,And,Role))
@@ -62,12 +63,15 @@ myPrettyPrinter client = defaultPP
         , FontForeground "green"
         ] . escapeMarkup
     , ppVisible = const ""
-    , ppHidden  = const ""
+    , ppHidden  = escapeMarkup
     , ppLayout  = markSpan
         [ FontWeight WeightBold
         , FontForeground "white"
         ] . escapeMarkup
-    , ppUrgent  = const ""
+    , ppUrgent  = markSpan
+        [ FontWeight WeightBold
+        , FontForeground "red"
+        ]
     }
 
 sendUpdateSignal :: String -> DBus ()
@@ -117,7 +121,7 @@ myRemoveKeys _ =
 -- Apply settings --
 main = do
     dbusClient <- newClient =<< getSessionBus
-    xmonad $ gnomeConfig
+    xmonad $ withUrgencyHook NoUrgencyHook $ gnomeConfig
         { terminal = myTerminal
         , workspaces = myWorkspaces
         , modMask = myModMask
