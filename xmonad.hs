@@ -16,7 +16,7 @@ import XMonad.Config.Gnome(gnomeConfig)
 import XMonad.Hooks.ManageHelpers(isDialog,isFullscreen,doFullFloat)
 import XMonad.Hooks.InsertPosition(insertPosition,Focus(Newer),Position(End))
 import XMonad.Hooks.DynamicLog(defaultPP,dynamicLogWithPP,PP(..))
-import XMonad.Hooks.UrgencyHook(withUrgencyHook,NoUrgencyHook(..))
+import XMonad.Hooks.UrgencyHook(focusUrgent,withUrgencyHook,NoUrgencyHook(..))
 import XMonad.Layout.NoBorders(smartBorders)
 import XMonad.Layout.Reflect(reflectHoriz)
 import XMonad.Layout.IM(withIM,Property(ClassName,And,Role))
@@ -111,8 +111,9 @@ myLayoutHook = smartBorders $ desktopLayoutModifiers myLayouts
 myModMask = mod4Mask
 
 myAdditionalKeys _ =
-    [ ((myModMask, xK_Return), promote) ]
-    ++ M.assocs (planeKeys myModMask (Lines 1) Finite)
+    [ ((myModMask, xK_Return), promote)
+    , ((myModMask, xK_BackSpace), focusUrgent)
+    ] ++ M.assocs (planeKeys myModMask (Lines 1) Finite)
 
 myRemoveKeys _ =
     [ (myModMask .|. shiftMask, xK_q) ]
