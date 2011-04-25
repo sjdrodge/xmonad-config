@@ -113,7 +113,7 @@ myModMask = mod4Mask
 myAdditionalKeys _ =
     [ ((myModMask, xK_Return), promote)
     , ((myModMask, xK_BackSpace), focusUrgent)
-    ] ++ M.assocs (planeKeys myModMask (Lines 1) Finite)
+    ] ++ M.assocs (planeKeys myModMask (Lines 3) Finite)
 
 myRemoveKeys _ =
     [ (myModMask .|. shiftMask, xK_q) ]
