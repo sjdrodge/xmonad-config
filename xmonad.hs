@@ -85,7 +85,8 @@ sendUpdateSignal output = send_ Signal
 
 
 -- Workspaces & Layouts --
-myWorkspaces = ["Web", "Comm", "Code"] ++ map (("Misc" ++) . show) [1..6]
+myWorkspaces = ["Web", "Comm", "Code",
+                "Four", "Five", "Six", "Seven", "Eight", "Nine"]
 
 myWebLayouts = Tall 1 0.01 0.7
 
