@@ -47,7 +47,6 @@ myManageHook = composeAll
     , className =? "Pidgin" --> doShift "Comm"
     ]
 
-
 -- logHook & Pretty Printer --
 myLogHook :: Client -> X ()
 myLogHook client = do
@@ -83,7 +82,6 @@ sendUpdateSignal output = send_ Signal
     , signalBody = [toVariant (TL.decodeUtf8 (fromString output))]
     }
 
-
 -- Workspaces & Layouts --
 myWorkspaces = ["Web", "Comm", "Code",
                 "Four", "Five", "Six", "Seven", "Eight", "Nine"]
@@ -107,7 +105,6 @@ myLayouts =
 
 myLayoutHook = smartBorders $ desktopLayoutModifiers myLayouts
 
-
 -- Keybindings --
 myModMask = mod4Mask
 
@@ -118,7 +115,6 @@ myAdditionalKeys _ =
 
 myRemoveKeys _ =
     [ (myModMask .|. shiftMask, xK_q) ]
-
 
 -- Apply settings --
 main = do
