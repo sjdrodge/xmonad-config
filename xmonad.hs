@@ -83,8 +83,8 @@ sendUpdateSignal output = send_ Signal
     }
 
 -- Workspaces & Layouts --
-myWorkspaces = ["Web", "Comm", "Code",
-                "Four", "Five", "Six", "Seven", "Eight", "Nine"]
+myWorkspaces = [ "Web", "Comm", "Code"
+               , "Four", "Five", "Six"]
 
 myWebLayouts = Tall 1 0.01 0.7
 
@@ -111,7 +111,7 @@ myModMask = mod4Mask
 myAdditionalKeys _ =
     [ ((myModMask, xK_Return), promote)
     , ((myModMask, xK_BackSpace), focusUrgent)
-    ] ++ M.assocs (planeKeys myModMask (Lines 3) Finite)
+    ] ++ M.assocs (planeKeys myModMask (Lines 2) Finite)
 
 myRemoveKeys _ =
     [ (myModMask .|. shiftMask, xK_q) ]
