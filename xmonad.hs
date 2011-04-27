@@ -17,6 +17,7 @@ import XMonad.Hooks.ManageHelpers(isDialog,isFullscreen,doFullFloat)
 import XMonad.Hooks.InsertPosition(insertPosition,Focus(Newer),Position(End))
 import XMonad.Hooks.DynamicLog(defaultPP,dynamicLogWithPP,PP(..))
 import XMonad.Hooks.UrgencyHook(focusUrgent,withUrgencyHook,NoUrgencyHook(..))
+import XMonad.Hooks.FadeInactive(setOpacity)
 import XMonad.Layout.NoBorders(smartBorders)
 import XMonad.Layout.Reflect(reflectHoriz)
 import XMonad.Layout.IM(withIM,Property(ClassName,And,Role))
@@ -46,6 +47,7 @@ myManageHook = composeAll
     [ isFullscreen --> doFullFloat
     , liftM not isDialog --> insertPosition End Newer
     , className =? "Pidgin" --> doShift "Comm"
+    , ask >>= \w -> liftX (setOpacity w 0.8) >> idHook
     ]
 
 -- logHook & Pretty Printer --
