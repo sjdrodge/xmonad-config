@@ -43,11 +43,17 @@ import Graphics.Rendering.Pango.Layout(escapeMarkup)
 
 myTerminal = "urxvtcd"
 
+-- ManageHooks --
+setOpacityManageHook ratio = do
+    w <- ask
+    liftX (setOpacity w ratio)
+    idHook
+
 myManageHook = composeAll
     [ isFullscreen --> doFullFloat
     , liftM not isDialog --> insertPosition End Newer
     , className =? "Pidgin" --> doShift "Comm"
-    , ask >>= \w -> liftX (setOpacity w 0.8) >> idHook
+    , liftM not isFullscreen --> setOpacityManageHook 0.8
     ]
 
 -- logHook & Pretty Printer --
