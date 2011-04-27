@@ -53,6 +53,8 @@ myManageHook = composeAll
     [ isFullscreen --> doFullFloat
     , liftM not isDialog --> insertPosition End Newer
     , className =? "Pidgin" --> doShift "Comm"
+    , className =? "Devhelp" --> doShift "Code"
+    , className =? "Gitg" --> doShift "Code"
     , liftM not isFullscreen --> setOpacityManageHook 0.8
     ]
 
