@@ -41,6 +41,7 @@ import Graphics.Rendering.Pango.Enums(Weight(..))
 import Graphics.Rendering.Pango.Markup(markSpan,SpanAttribute(..))
 import Graphics.Rendering.Pango.Layout(escapeMarkup)
 
+-- Terminal --
 myTerminal = "urxvtcd"
 
 -- ManageHooks --
@@ -58,11 +59,15 @@ myManageHook = composeAll
     , liftM not isFullscreen --> setOpacityManageHook 0.8
     ]
 
--- logHook & Pretty Printer --
-myLogHook :: Client -> X ()
-myLogHook client = do
-    dynamicLogWithPP (myPrettyPrinter client)
-    updatePointer (TowardsCentre 0.6 0.6)
+-- LogHook --
+sendUpdateSignal :: String -> DBus ()
+sendUpdateSignal output = send_ Signal
+    { signalPath = fromString "/org/xmonad/Log"
+    , signalMember = fromString "Update"
+    , signalInterface = fromString "org.xmonad.Log"
+    , signalDestination = Nothing
+    , signalBody = [toVariant (TL.decodeUtf8 (fromString output))]
+    }
 
 myPrettyPrinter :: Client -> PP
 myPrettyPrinter client = defaultPP
@@ -84,14 +89,10 @@ myPrettyPrinter client = defaultPP
         ]
     }
 
-sendUpdateSignal :: String -> DBus ()
-sendUpdateSignal output = send_ Signal
-    { signalPath = fromString "/org/xmonad/Log"
-    , signalMember = fromString "Update"
-    , signalInterface = fromString "org.xmonad.Log"
-    , signalDestination = Nothing
-    , signalBody = [toVariant (TL.decodeUtf8 (fromString output))]
-    }
+myLogHook :: Client -> X ()
+myLogHook client = do
+    dynamicLogWithPP (myPrettyPrinter client)
+    updatePointer (TowardsCentre 0.6 0.6)
 
 -- Workspaces & Layouts --
 myWorkspaces = [ "Web", "Comm", "Code"
