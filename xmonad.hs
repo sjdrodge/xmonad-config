@@ -22,7 +22,7 @@ import XMonad.Layout.NoBorders(lessBorders,Ambiguity(OnlyFloat))
 import XMonad.Layout.Reflect(reflectHoriz)
 import XMonad.Layout.IM(withIM,Property(ClassName,And,Role))
 import XMonad.Layout.PerWorkspace(onWorkspace)
-import XMonad.Layout.Named(named)
+import XMonad.Layout.Named(named,nameTail)
 import XMonad.Layout.Spacing(spacing)
 import XMonad.Layout.FixedColumn(FixedColumn(..))
 import XMonad.Layout.Grid(Grid(Grid))
@@ -108,7 +108,7 @@ myCodeLayouts = named "Code" $ reflectHoriz (FixedColumn 1 1 80 6)
 
 myMiscLayouts = myWebLayouts ||| Grid
 
-myLayouts = spacing 3 $
+myLayouts = nameTail $ nameTail $ spacing 3 $
     ( onWorkspace "Web" myWebLayouts
     $ onWorkspace "Comm" myCommLayouts
     $ onWorkspace "Code" myCodeLayouts
