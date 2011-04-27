@@ -18,7 +18,7 @@ import XMonad.Hooks.InsertPosition(insertPosition,Focus(Newer),Position(End))
 import XMonad.Hooks.DynamicLog(defaultPP,dynamicLogWithPP,PP(..))
 import XMonad.Hooks.UrgencyHook(focusUrgent,withUrgencyHook,NoUrgencyHook(..))
 import XMonad.Hooks.FadeInactive(setOpacity)
-import XMonad.Layout.NoBorders(smartBorders)
+import XMonad.Layout.NoBorders(lessBorders,Ambiguity(OnlyFloat))
 import XMonad.Layout.Reflect(reflectHoriz)
 import XMonad.Layout.IM(withIM,Property(ClassName,And,Role))
 import XMonad.Layout.PerWorkspace(onWorkspace)
@@ -99,14 +99,14 @@ myCodeLayouts = named "Code" $ reflectHoriz (FixedColumn 1 1 80 6)
 
 myMiscLayouts = myWebLayouts ||| Grid
 
-myLayouts = spacing 3
+myLayouts = spacing 3 $
     ( onWorkspace "Web" myWebLayouts
     $ onWorkspace "Comm" myCommLayouts
     $ onWorkspace "Code" myCodeLayouts
     $ myMiscLayouts
     ) ||| Full
 
-myLayoutHook = smartBorders $ desktopLayoutModifiers myLayouts
+myLayoutHook = lessBorders OnlyFloat $ desktopLayoutModifiers myLayouts
 
 -- Keybindings --
 myModMask = mod4Mask
