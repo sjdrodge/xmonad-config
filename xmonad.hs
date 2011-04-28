@@ -85,8 +85,11 @@ myPrettyPrinter client = defaultPP
 
 fadeRules :: Query Rational
 fadeRules = do
-    b <- isUnfocused
-    return $ if b then 0.8 else 0.85
+    fullscreen <- isFullscreen
+    focused <- liftM not isUnfocused
+    return $ case () of _ | fullscreen -> 1
+                          | focused -> 0.85
+                          | otherwise -> 0.8
 
 myLogHook :: Client -> X ()
 myLogHook client = do
