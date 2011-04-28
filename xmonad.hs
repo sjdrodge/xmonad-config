@@ -17,7 +17,7 @@ import XMonad.Hooks.ManageHelpers(isDialog,isFullscreen,doFullFloat)
 import XMonad.Hooks.InsertPosition(insertPosition,Focus(Newer),Position(End))
 import XMonad.Hooks.DynamicLog(defaultPP,dynamicLogWithPP,PP(..))
 import XMonad.Hooks.UrgencyHook(focusUrgent,withUrgencyHook,NoUrgencyHook(..))
-import XMonad.Hooks.FadeInactive(fadeInactiveLogHook)
+import XMonad.Hooks.FadeInactive(isUnfocused,fadeOutLogHook)
 import XMonad.Layout.NoBorders(lessBorders,Ambiguity(OnlyFloat))
 import XMonad.Layout.Reflect(reflectHoriz)
 import XMonad.Layout.IM(withIM,Property(ClassName,And,Role))
@@ -83,11 +83,16 @@ myPrettyPrinter client = defaultPP
         ]
     }
 
+fadeRules :: Query Rational
+fadeRules = do
+    b <- isUnfocused
+    return $ if b then 0.8 else 0.85
+
 myLogHook :: Client -> X ()
 myLogHook client = do
     dynamicLogWithPP (myPrettyPrinter client)
     updatePointer (TowardsCentre 0.6 0.6)
-    fadeInactiveLogHook 0.8
+    fadeOutLogHook fadeRules
 
 -- Workspaces & Layouts --
 myWorkspaces = [ "Web", "Comm", "Code"
