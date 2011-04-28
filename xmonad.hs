@@ -17,7 +17,7 @@ import XMonad.Hooks.ManageHelpers(isDialog,isFullscreen,doFullFloat)
 import XMonad.Hooks.InsertPosition(insertPosition,Focus(Newer),Position(End))
 import XMonad.Hooks.DynamicLog(defaultPP,dynamicLogWithPP,PP(..))
 import XMonad.Hooks.UrgencyHook(focusUrgent,withUrgencyHook,NoUrgencyHook(..))
-import XMonad.Hooks.FadeInactive(setOpacity)
+import XMonad.Hooks.FadeInactive(fadeInactiveLogHook)
 import XMonad.Layout.NoBorders(lessBorders,Ambiguity(OnlyFloat))
 import XMonad.Layout.Reflect(reflectHoriz)
 import XMonad.Layout.IM(withIM,Property(ClassName,And,Role))
@@ -45,18 +45,12 @@ import Graphics.Rendering.Pango.Layout(escapeMarkup)
 myTerminal = "urxvtcd"
 
 -- ManageHooks --
-setOpacityManageHook ratio = do
-    w <- ask
-    liftX (setOpacity w ratio)
-    idHook
-
 myManageHook = composeAll
     [ isFullscreen --> doFullFloat
     , liftM not isDialog --> insertPosition End Newer
     , className =? "Pidgin" --> doShift "Comm"
     , className =? "Devhelp" --> doShift "Code"
     , className =? "Gitg" --> doShift "Code"
-    , liftM not isFullscreen --> setOpacityManageHook 0.8
     ]
 
 -- LogHook --
@@ -93,6 +87,7 @@ myLogHook :: Client -> X ()
 myLogHook client = do
     dynamicLogWithPP (myPrettyPrinter client)
     updatePointer (TowardsCentre 0.6 0.6)
+    fadeInactiveLogHook 0.8
 
 -- Workspaces & Layouts --
 myWorkspaces = [ "Web", "Comm", "Code"
