@@ -42,7 +42,7 @@ import Graphics.Rendering.Pango.Markup(markSpan,SpanAttribute(..))
 import Graphics.Rendering.Pango.Layout(escapeMarkup)
 
 -- Terminal --
-myTerminal = "urxvtcd"
+myTerminal = "~/bin/urxvtcd"
 
 -- ManageHooks --
 myManageHook = composeAll
