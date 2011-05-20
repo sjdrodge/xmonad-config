@@ -13,8 +13,7 @@ import Control.Monad(liftM)
 import XMonad
 import XMonad.Config.Desktop(desktopLayoutModifiers)
 import XMonad.Config.Gnome(gnomeConfig)
-import XMonad.Hooks.ManageHelpers(isDialog,isFullscreen,doFullFloat)
-import XMonad.Hooks.InsertPosition(insertPosition,Focus(Newer),Position(End))
+import XMonad.Hooks.ManageHelpers(isFullscreen,doFullFloat)
 import XMonad.Hooks.DynamicLog(defaultPP,dynamicLogWithPP,PP(..))
 import XMonad.Hooks.UrgencyHook(focusUrgent,withUrgencyHook,NoUrgencyHook(..))
 import XMonad.Hooks.FadeInactive(isUnfocused,fadeOutLogHook)
@@ -47,7 +46,6 @@ myTerminal = "~/bin/urxvtcd"
 -- ManageHooks --
 myManageHook = composeAll
     [ isFullscreen --> doFullFloat
-    , liftM not isDialog --> insertPosition End Newer
     , className =? "Empathy" --> doShift "Comm"
     , className =? "Devhelp" --> doShift "Code"
     , className =? "Gitg" --> doShift "Code"
