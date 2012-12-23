@@ -46,7 +46,7 @@ myTerminal = "~/bin/urxvtcd"
 -- ManageHooks --
 myManageHook = composeAll
     [ isFullscreen --> doFullFloat
-    , className =? "Empathy" --> doShift "Comm"
+    , className =? "Pidgin" --> doShift "Comm"
     , className =? "Devhelp" --> doShift "Code"
     , className =? "Gitg" --> doShift "Code"
     ]
@@ -103,7 +103,7 @@ myWorkspaces = [ "Web", "Comm"
 myWebLayouts = Tall 1 0.01 0.7
 
 myCommLayouts = named "Comm" $ reflectHoriz $
-    withIM (0.25) (ClassName "Empathy" `And` Role "contact_list")
+    withIM (0.25) (ClassName "Pidgin" `And` Role "buddy_list")
            (Mirror $ Tall 1 0.01 0.5)
 
 myCodeLayouts = named "Code" $ reflectHoriz (FixedColumn 1 1 80 6)
