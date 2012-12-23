@@ -25,6 +25,7 @@ import XMonad.Layout.Named(named,nameTail)
 import XMonad.Layout.Spacing(spacing)
 import XMonad.Layout.FixedColumn(FixedColumn(..))
 import XMonad.Layout.Grid(Grid(Grid))
+import XMonad.Layout.Fullscreen(fullscreenEventHook,fullscreenManageHook,fullscreenFull)
 import XMonad.Util.CustomKeys(customKeysFrom)
 import XMonad.Actions.Promote(promote)
 import XMonad.Actions.Plane(planeKeys,Lines(Lines),Limits(Finite))
@@ -45,7 +46,7 @@ myTerminal = "~/bin/urxvtcd"
 
 -- ManageHooks --
 myManageHook = composeAll
-    [ isFullscreen --> doFullFloat
+    [ fullscreenManageHook
     , className =? "Wine" --> doFloat
     , className =? "Pidgin" --> doShift "Comm"
     , className =? "Devhelp" --> doShift "Code"
@@ -118,7 +119,7 @@ myLayouts = nameTail $ nameTail $ spacing 3 $
     $ myMiscLayouts
     ) ||| Full
 
-myLayoutHook = lessBorders OnlyFloat $ desktopLayoutModifiers myLayouts
+myLayoutHook = lessBorders OnlyFloat $ fullscreenFull $ desktopLayoutModifiers myLayouts
 
 -- Keybindings --
 myModMask = mod4Mask
@@ -141,5 +142,5 @@ main = do
         , keys = customKeysFrom gnomeConfig myRemoveKeys myAdditionalKeys
         , layoutHook = myLayoutHook
         , manageHook = myManageHook <+> manageHook gnomeConfig
-        , logHook = myLogHook dbusClient >> logHook gnomeConfig
+        , handleEventHook = fullscreenEventHook <+> handleEventHook gnomeConfig
         }
