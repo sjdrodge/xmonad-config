@@ -20,7 +20,7 @@ import XMonad.Hooks.FadeInactive(isUnfocused,fadeOutLogHook)
 import XMonad.Layout.NoBorders(lessBorders,Ambiguity(OnlyFloat))
 import XMonad.Layout.Reflect(reflectHoriz)
 import XMonad.Layout.IM(withIM,Property(ClassName,And,Role))
-import XMonad.Layout.PerWorkspace(onWorkspace)
+import XMonad.Layout.PerWorkspace(onWorkspace,onWorkspaces)
 import XMonad.Layout.Named(named,nameTail)
 import XMonad.Layout.Spacing(spacing)
 import XMonad.Layout.FixedColumn(FixedColumn(..))
@@ -96,8 +96,9 @@ myLogHook client = do
     fadeOutLogHook fadeRules
 
 -- Workspaces & Layouts --
-myWorkspaces = [ "Web", "Comm", "Code"
-               , "Four", "Five", "Six"]
+myWorkspaces = [ "Web", "Comm"
+               , "Web2", "Code"
+               , "Five", "Six"]
 
 myWebLayouts = Tall 1 0.01 0.7
 
@@ -110,7 +111,7 @@ myCodeLayouts = named "Code" $ reflectHoriz (FixedColumn 1 1 80 6)
 myMiscLayouts = myWebLayouts ||| Grid
 
 myLayouts = nameTail $ nameTail $ spacing 3 $
-    ( onWorkspace "Web" myWebLayouts
+    ( onWorkspaces ["Web","Web2"] myWebLayouts
     $ onWorkspace "Comm" myCommLayouts
     $ onWorkspace "Code" myCodeLayouts
     $ myMiscLayouts
@@ -124,7 +125,7 @@ myModMask = mod4Mask
 myAdditionalKeys _ =
     [ ((myModMask, xK_Return), promote)
     , ((myModMask, xK_BackSpace), focusUrgent)
-    ] ++ M.assocs (planeKeys myModMask (Lines 2) Finite)
+    ] ++ M.assocs (planeKeys myModMask (Lines 3) Finite)
 
 myRemoveKeys _ =
     [ (myModMask .|. shiftMask, xK_q) ]
