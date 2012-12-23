@@ -5,6 +5,7 @@
 -- dbus-client: <http://hackage.haskell.org/package/dbus-client>
 -- pango: <http://hackage.haskell.org/package/pango>
 
+import qualified XMonad.StackSet as W
 import qualified Data.Map as M(assocs)
 import Data.String(fromString)
 import qualified Data.Text.Lazy.Encoding as TL(decodeUtf8)
@@ -17,7 +18,7 @@ import XMonad.Hooks.ManageHelpers(isFullscreen,doFullFloat)
 import XMonad.Hooks.DynamicLog(defaultPP,dynamicLogWithPP,PP(..))
 import XMonad.Hooks.UrgencyHook(focusUrgent,withUrgencyHook,NoUrgencyHook(..))
 import XMonad.Hooks.FadeInactive(isUnfocused,fadeOutLogHook)
-import XMonad.Layout.NoBorders(lessBorders,Ambiguity(OnlyFloat))
+import XMonad.Layout.NoBorders(lessBorders,SetsAmbiguous(hiddens))
 import XMonad.Layout.Reflect(reflectHoriz)
 import XMonad.Layout.IM(withIM,Property(ClassName,And,Role))
 import XMonad.Layout.PerWorkspace(onWorkspace,onWorkspaces)
@@ -119,7 +120,13 @@ myLayouts = nameTail $ nameTail $ spacing 3 $
     $ myMiscLayouts
     ) ||| Full
 
-myLayoutHook = lessBorders OnlyFloat $ fullscreenFull $ desktopLayoutModifiers myLayouts
+data MyAmbiguity = MyAmbiguity deriving (Read, Show)
+
+instance SetsAmbiguous MyAmbiguity where
+    hiddens _ wset mst wrs = map fst $ filter (\x -> snd x == screenrect) wrs
+        where screenrect = screenRect $ W.screenDetail $ W.current wset
+
+myLayoutHook =  lessBorders MyAmbiguity $ fullscreenFull $ desktopLayoutModifiers myLayouts
 
 -- Keybindings --
 myModMask = mod4Mask
