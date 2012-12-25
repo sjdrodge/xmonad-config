@@ -123,7 +123,7 @@ myLayouts = nameTail $ nameTail $ spacing 3 $
 data MyAmbiguity = MyAmbiguity deriving (Read, Show)
 
 instance SetsAmbiguous MyAmbiguity where
-    hiddens _ wset mst wrs = map fst $ filter (\x -> snd x == screenrect) wrs
+    hiddens _ wset _ wrs = map fst $ filter ((screenrect ==) . snd) wrs
         where screenrect = screenRect $ W.screenDetail $ W.current wset
 
 myLayoutHook =  lessBorders MyAmbiguity $ fullscreenFull $ desktopLayoutModifiers myLayouts
