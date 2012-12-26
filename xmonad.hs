@@ -32,8 +32,6 @@ myManageHook = composeAll
     , className =? "Synapse" --> doIgnore
     , className =? "Wine" --> doFloat
     , className =? "Pidgin" --> doShift "Comm"
-    , className =? "Devhelp" --> doShift "Code"
-    , className =? "Gitg" --> doShift "Code"
     ]
 
 -- LogHook --
