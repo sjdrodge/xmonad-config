@@ -1,6 +1,6 @@
 import qualified XMonad.StackSet as W
 import qualified Data.Map as M(assocs)
-import Control.Monad(liftM)
+import Control.Monad(liftM2)
 
 import XMonad
 import XMonad.Config.Desktop(desktopLayoutModifiers)
@@ -35,12 +35,18 @@ myManageHook = composeAll
     ]
 
 -- LogHook --
+
+fadeWhiteList = [ className =? "URxvt"
+                , className =? "Pidgin"
+                ]
+
 fadeRules :: Query Rational
 fadeRules = do
+    whitelisted <- foldl1 (liftM2 (||)) fadeWhiteList
     fullscreen <- isFullscreen
-    focused <- liftM not isUnfocused
-    return $ case () of _ | fullscreen -> 1
-                          | focused -> 0.85
+    unfocused <- isUnfocused
+    return $ case () of _ | not whitelisted || fullscreen -> 1
+                          | not unfocused -> 0.85
                           | otherwise -> 0.8
 
 myLogHook = do
