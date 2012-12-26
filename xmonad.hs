@@ -48,6 +48,7 @@ myTerminal = "~/bin/urxvtcd"
 -- ManageHooks --
 myManageHook = composeAll
     [ fullscreenManageHook
+    , className =? "Synapse" --> doIgnore
     , className =? "Wine" --> doFloat
     , className =? "Pidgin" --> doShift "Comm"
     , className =? "Devhelp" --> doShift "Code"
