@@ -1,6 +1,7 @@
 import qualified XMonad.StackSet as W
-import qualified Data.Map as M(assocs)
+import qualified Data.Map as M
 import Control.Monad(liftM2)
+import Data.Maybe(fromJust)
 
 import XMonad
 import XMonad.Config.Desktop(desktopLayoutModifiers)
@@ -78,8 +79,12 @@ myLayouts = nameTail $ nameTail $ spacing 3 $
 data MyAmbiguity = MyAmbiguity deriving (Read, Show)
 
 instance SetsAmbiguous MyAmbiguity where
-    hiddens _ wset _ wrs = map fst $ filter ((screenrect ==) . snd) wrs
-        where screenrect = screenRect $ W.screenDetail $ W.current wset
+    hiddens _ wset _ wrs = map fst $ filter windowIsFullScreen wrs
+        where screens = (W.current wset) : (W.visible wset)
+              rectFromScreen = screenRect . W.screenDetail
+              windowsFromScreen = W.integrate' . W.stack . W.workspace
+              windowtoscreen = concatMap (\s -> [(w, rectFromScreen s) | w <- windowsFromScreen s]) screens
+              windowIsFullScreen (win,rect) = (fromJust $ lookup win windowtoscreen) == rect
 
 myLayoutHook =  lessBorders MyAmbiguity $ fullscreenFull $ desktopLayoutModifiers myLayouts
 
