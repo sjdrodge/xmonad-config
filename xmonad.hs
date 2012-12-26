@@ -150,5 +150,6 @@ main = do
         , keys = customKeysFrom gnomeConfig myRemoveKeys myAdditionalKeys
         , layoutHook = myLayoutHook
         , manageHook = myManageHook <+> manageHook gnomeConfig
+        , logHook = myLogHook dbusClient >> logHook gnomeConfig
         , handleEventHook = fullscreenEventHook <+> handleEventHook gnomeConfig
         }
