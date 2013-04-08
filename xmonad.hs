@@ -11,7 +11,7 @@ import XMonad.Hooks.UrgencyHook(focusUrgent,withUrgencyHook,NoUrgencyHook(..))
 import XMonad.Hooks.FadeInactive(isUnfocused,fadeOutLogHook)
 import XMonad.Layout.NoBorders(lessBorders,SetsAmbiguous(hiddens))
 import XMonad.Layout.Reflect(reflectHoriz)
-import XMonad.Layout.IM(withIM,Property(ClassName,And,Role))
+import XMonad.Layout.IM(withIM,Property(ClassName,And,Title))
 import XMonad.Layout.PerWorkspace(onWorkspace,onWorkspaces)
 import XMonad.Layout.Named(named,nameTail)
 import XMonad.Layout.Spacing(spacing)
@@ -62,7 +62,7 @@ myWorkspaces = [ "Web", "Comm"
 myWebLayouts = Tall 1 0.01 0.7
 
 myCommLayouts = named "Comm" $ reflectHoriz $
-    withIM (0.25) (ClassName "Pidgin" `And` Role "buddy_list")
+    withIM (0.25) (ClassName "Google-chrome" `And` Title "Chat")
            (Mirror $ Tall 1 0.01 0.5)
 
 myCodeLayouts = named "Code" $ reflectHoriz (FixedColumn 1 1 80 6)
