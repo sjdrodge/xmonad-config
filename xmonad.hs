@@ -86,7 +86,7 @@ instance SetsAmbiguous MyAmbiguity where
               windowtoscreen = concatMap (\s -> [(w, rectFromScreen s) | w <- windowsFromScreen s]) screens
               windowIsFullScreen (win,rect) = (fromJust $ lookup win windowtoscreen) == rect
 
-myLayoutHook =  lessBorders MyAmbiguity $ fullscreenFull $ desktopLayoutModifiers myLayouts
+myLayoutHook = lessBorders MyAmbiguity $ fullscreenFull $ desktopLayoutModifiers myLayouts
 
 -- Keybindings --
 myModMask = mod4Mask
