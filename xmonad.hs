@@ -32,7 +32,7 @@ myManageHook = composeAll
     [ fullscreenManageHook
     , className =? "Synapse" --> doIgnore
     , className =? "Wine" --> doFloat
-    , className =? "Pidgin" --> doShift "Comm"
+    , className =? "crx_nckgahadagoaajjgafhacjanaoiihapd" --> doShift "Comm" --Chat for Google
     ]
 
 -- LogHook --
@@ -62,7 +62,7 @@ myWorkspaces = [ "Web", "Comm"
 myWebLayouts = Tall 1 0.01 0.7
 
 myCommLayouts = named "Comm" $ reflectHoriz $
-    withIM (0.25) (ClassName "Google-chrome" `And` Title "Chat")
+    withIM (0.25) (ClassName "crx_nckgahadagoaajjgafhacjanaoiihapd" `And` Title "Chat")
            (Mirror $ Tall 1 0.01 0.5)
 
 myCodeLayouts = named "Code" $ reflectHoriz (FixedColumn 1 1 80 6)
