@@ -5,7 +5,7 @@ import Data.Maybe(fromJust)
 
 import XMonad
 import XMonad.Config.Desktop(desktopLayoutModifiers)
-import XMonad.Config.Gnome(gnomeConfig)
+import XMonad.Config.Kde(kde4Config)
 import XMonad.Hooks.ManageHelpers(isFullscreen)
 import XMonad.Hooks.UrgencyHook(focusUrgent,withUrgencyHook,NoUrgencyHook(..))
 import XMonad.Hooks.FadeInactive(isUnfocused,fadeOutLogHook)
@@ -101,13 +101,13 @@ myRemoveKeys _ =
 
 -- Apply settings --
 main = do
-    xmonad $ withUrgencyHook NoUrgencyHook $ gnomeConfig
+    xmonad $ withUrgencyHook NoUrgencyHook $ kde4Config
         { terminal = myTerminal
         , workspaces = myWorkspaces
         , modMask = myModMask
-        , keys = customKeysFrom gnomeConfig myRemoveKeys myAdditionalKeys
+        , keys = customKeysFrom kde4Config myRemoveKeys myAdditionalKeys
         , layoutHook = myLayoutHook
-        , manageHook = myManageHook <+> manageHook gnomeConfig
-        , logHook = myLogHook >> logHook gnomeConfig
-        , handleEventHook = fullscreenEventHook <+> handleEventHook gnomeConfig
+        , manageHook = myManageHook <+> manageHook kde4Config
+        , logHook = myLogHook >> logHook kde4Config
+        , handleEventHook = fullscreenEventHook <+> handleEventHook kde4Config
         }
