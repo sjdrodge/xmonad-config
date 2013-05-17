@@ -31,10 +31,11 @@ myTerminal = "~/bin/urxvtcd"
 myManageHook = composeAll $ []
     ++ [ fullscreenManageHook ]
     ++ [ className =? name --> doFloat  | name <- floats ]
+    ++ [ resource  =? name --> doFloat  | name <- floats ]
     ++ [ className =? name --> doIgnore | name <- ignores ]
     ++ [ className =? name --> doShift workspace | (name, workspace) <- shifts ]
     where
-        floats  = [ "Wine" ]
+        floats  = [ "Wine", "Steam", "plasma-desktop" ]
         ignores = [ "Synapse" ]
         shifts  = [ ("crx_nckgahadagoaajjgafhacjanaoiihapd", "Comm") ]
 
