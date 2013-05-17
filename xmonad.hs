@@ -47,8 +47,8 @@ fadeRules = do
     fullscreen <- isFullscreen
     unfocused <- isUnfocused
     return $ case () of _ | not whitelisted || fullscreen -> 1
-                          | not unfocused -> 0.9
-                          | otherwise -> 0.85
+                          | not unfocused -> 0.95
+                          | otherwise -> 0.9
 
 myLogHook = do
     updatePointer (TowardsCentre 0.6 0.6)
