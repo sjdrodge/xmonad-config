@@ -28,12 +28,15 @@ import XMonad.Actions.UpdatePointer
 myTerminal = "~/bin/urxvtcd"
 
 -- ManageHooks --
-myManageHook = composeAll
-    [ fullscreenManageHook
-    , className =? "Synapse" --> doIgnore
-    , className =? "Wine" --> doFloat
-    , className =? "crx_nckgahadagoaajjgafhacjanaoiihapd" --> doShift "Comm" --Chat for Google
-    ]
+myManageHook = composeAll $ []
+    ++ [ fullscreenManageHook ]
+    ++ [ className =? name --> doFloat  | name <- floats ]
+    ++ [ className =? name --> doIgnore | name <- ignores ]
+    ++ [ className =? name --> doShift workspace | (name, workspace) <- shifts ]
+    where
+        floats  = [ "Wine" ]
+        ignores = [ "Synapse" ]
+        shifts  = [ ("crx_nckgahadagoaajjgafhacjanaoiihapd", "Comm") ]
 
 -- LogHook --
 
