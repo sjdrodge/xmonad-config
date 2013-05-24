@@ -56,7 +56,6 @@ fadeRules = do
                           | otherwise -> 0.9
 
 myLogHook = do
-    updatePointer (TowardsCentre 0.6 0.6)
     fadeOutLogHook fadeRules
 
 -- Workspaces & Layouts --
