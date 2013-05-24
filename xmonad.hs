@@ -65,12 +65,12 @@ myWorkspaces = [ "Web", "Comm"
 
 myWebLayouts = Tall { tallNMaster = 1
                     , tallRatioIncrement = 0.01
-                    , tallRatio = 0.7
+                    , tallRatio = 0.6
                     }
 
 myCommLayouts = named "Comm" $ reflectHoriz $
     withIM ( 0.25 ) ( ClassName "Google-chrome" `And` Title "Hangouts" )
-           ( Mirror $ myWebLayouts { tallRatio = 0.5 } )
+           ( Mirror $ myWebLayouts { tallRatio = 0.55 } )
 
 myCodeLayouts = named "Code" $ reflectHoriz ( FixedColumn 1 1 80 6 )
 
