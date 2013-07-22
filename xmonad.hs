@@ -4,24 +4,30 @@ import Control.Monad ( liftM2 )
 import Data.Maybe ( fromJust )
 
 import XMonad
+import XMonad.Actions.Plane ( planeKeys, Lines ( Lines ), Limits ( Finite ) )
+import XMonad.Actions.Promote ( promote )
+import XMonad.Actions.UpdatePointer ( updatePointer, PointerPosition ( TowardsCentre ) )
 import XMonad.Config.Desktop ( desktopLayoutModifiers )
 import XMonad.Config.Kde ( kde4Config )
-import XMonad.Hooks.ManageHelpers ( isFullscreen )
-import XMonad.Hooks.UrgencyHook ( focusUrgent, withUrgencyHook, NoUrgencyHook ( .. ) )
 import XMonad.Hooks.FadeInactive ( isUnfocused, fadeOutLogHook )
-import XMonad.Layout.NoBorders ( lessBorders, SetsAmbiguous ( hiddens ) )
-import XMonad.Layout.Reflect ( reflectHoriz )
-import XMonad.Layout.IM ( withIM, Property ( ClassName, And, Title ) )
-import XMonad.Layout.PerWorkspace ( onWorkspace, onWorkspaces )
-import XMonad.Layout.Named ( named, nameTail )
-import XMonad.Layout.Spacing ( spacing )
+import XMonad.Hooks.ManageHelpers ( isFullscreen, transience' )
+import XMonad.Hooks.UrgencyHook ( focusUrgent, withUrgencyHook, NoUrgencyHook ( .. ) )
+import XMonad.Layout.Accordion
+import XMonad.Layout.ComboP
+import XMonad.Layout.DecorationMadness
 import XMonad.Layout.FixedColumn ( FixedColumn ( .. ) )
-import XMonad.Layout.Grid ( Grid ( Grid ) )
 import XMonad.Layout.Fullscreen ( fullscreenEventHook, fullscreenManageHook, fullscreenFull )
+import XMonad.Layout.Grid ( Grid ( Grid ) )
+import XMonad.Layout.IM ( withIM, Property ( ClassName, And, Title ) )
+import XMonad.Layout.Named ( named, nameTail )
+import XMonad.Layout.NoBorders ( lessBorders, SetsAmbiguous ( hiddens ) )
+import XMonad.Layout.PerWorkspace ( onWorkspace, onWorkspaces )
+import XMonad.Layout.Reflect ( reflectHoriz, reflectVert )
+import XMonad.Layout.Simplest
+import XMonad.Layout.Spacing ( spacing )
+import XMonad.Layout.Tabbed
+import XMonad.Layout.TwoPane
 import XMonad.Util.CustomKeys ( customKeysFrom )
-import XMonad.Actions.Promote ( promote )
-import XMonad.Actions.Plane ( planeKeys, Lines ( Lines ), Limits ( Finite ) )
-import XMonad.Actions.UpdatePointer ( updatePointer, PointerPosition ( TowardsCentre ) )
 
 -- Terminal --
 myTerminal = "~/bin/urxvtcd"
