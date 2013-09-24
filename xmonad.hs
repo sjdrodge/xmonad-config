@@ -31,7 +31,7 @@ import XMonad.Layout.WindowNavigation
 import XMonad.Util.CustomKeys ( customKeysFrom )
 
 -- Terminal --
-myTerminal = "~/bin/urxvtcd"
+myTerminal = "konsole"
 
 -- ManageHooks --
 myManageHook = composeAll $ []
