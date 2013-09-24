@@ -27,6 +27,7 @@ import XMonad.Layout.Simplest
 import XMonad.Layout.Spacing ( spacing )
 import XMonad.Layout.Tabbed
 import XMonad.Layout.TwoPane
+import XMonad.Layout.WindowNavigation
 import XMonad.Util.CustomKeys ( customKeysFrom )
 
 -- Terminal --
@@ -74,9 +75,10 @@ myWebLayouts = Tall { tallNMaster = 1
                     , tallRatio = 0.6
                     }
 
-myCommLayouts = named "Comm" $ reflectHoriz $
-    withIM ( 0.25 ) ( ClassName "Google-chrome" `And` Title "Hangouts" )
-           ( Mirror $ myWebLayouts { tallRatio = 0.55 } )
+myCommLayouts = named "Comm"
+    $ reflectHoriz $ withIM ( 0.20 ) ( ClassName "Google-chrome" `And` Title "Hangouts" )
+    $ combineTwoP ( reflectVert $ Mirror $ TwoPane 0.01 0.45) Grid Grid ( Resource "crx_nckgahadagoaajjgafhacjanaoiihapd" )
+--    ( Mirror $ myWebLayouts { tallRatio = 0.55 } )
 
 myCodeLayouts = named "Code" $ reflectHoriz ( FixedColumn 1 1 80 6 )
 
@@ -107,6 +109,7 @@ myModMask = mod4Mask
 myAdditionalKeys _ =
     [ ( ( myModMask, xK_Return ), promote )
     , ( ( myModMask, xK_BackSpace ), focusUrgent )
+    , ( ( myModMask, xK_s ), sendMessage $ SwapWindow )
     ] ++ M.assocs ( planeKeys myModMask ( Lines 3 ) Finite )
 
 myRemoveKeys _ =
