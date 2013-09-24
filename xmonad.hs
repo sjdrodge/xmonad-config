@@ -35,6 +35,7 @@ myTerminal = "konsole"
 
 -- ManageHooks --
 myManageHook = composeAll $ []
+    ++ [ transience' ]
     ++ [ fullscreenManageHook ]
     ++ [ className =? name --> doFloat  | name <- floats ]
     ++ [ resource  =? name --> doFloat  | name <- floats ]
