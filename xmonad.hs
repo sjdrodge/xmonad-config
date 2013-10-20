@@ -37,13 +37,11 @@ myTerminal = "konsole"
 myManageHook = composeAll $ []
     ++ [ transience' ]
     ++ [ fullscreenManageHook ]
-    ++ [ className =? name --> doFloat  | name <- floats ]
-    ++ [ resource  =? name --> doFloat  | name <- floats ]
-    ++ [ className =? name --> doIgnore | name <- ignores ]
-    ++ [ resource  =? name --> doIgnore | name <- ignores ]
-    ++ [ className =? name --> doShift workspace | ( name, workspace ) <- shifts ]
-    ++ [ resource  =? name --> doShift workspace | ( name, workspace ) <- shifts ]
+    ++ [ classOrResource name --> doFloat           | name                <- floats ]
+    ++ [ classOrResource name --> doIgnore          | name                <- ignores ]
+    ++ [ classOrResource name --> doShift workspace | ( name, workspace ) <- shifts ]
     where
+        classOrResource x = className =? x <||> resource =? x
         floats  = [ "Wine", "Steam", "plasma-desktop" ]
         ignores = [ "Synapse" ]
         shifts  = [ ( "crx_nckgahadagoaajjgafhacjanaoiihapd", "Comm" ) ]
