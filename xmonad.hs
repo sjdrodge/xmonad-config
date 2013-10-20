@@ -19,6 +19,8 @@ import XMonad.Layout.FixedColumn ( FixedColumn ( .. ) )
 import XMonad.Layout.Fullscreen ( fullscreenEventHook, fullscreenManageHook, fullscreenFull )
 import XMonad.Layout.Grid ( Grid ( Grid ) )
 import XMonad.Layout.IM ( withIM, Property ( ClassName, And, Title ) )
+import XMonad.Layout.MultiToggle
+import XMonad.Layout.MultiToggle.Instances
 import XMonad.Layout.Named ( named, nameTail )
 import XMonad.Layout.NoBorders ( lessBorders, SetsAmbiguous ( hiddens ) )
 import XMonad.Layout.PerWorkspace ( onWorkspace, onWorkspaces )
@@ -65,12 +67,12 @@ myCodeLayouts = named "Code" $ reflectHoriz ( FixedColumn 1 1 80 6 )
 
 myMiscLayouts = myWebLayouts ||| Grid
 
-myLayouts = nameTail $ nameTail $ spacing 3 $
+myLayouts = mkToggle (single FULL) $ nameTail $ nameTail $ spacing 3 $
     ( onWorkspaces [ "Web", "Web2" ] myWebLayouts
     $ onWorkspace "Comm" myCommLayouts
     $ onWorkspace "Code" myCodeLayouts
     $ myMiscLayouts
-    ) ||| Full
+    )
 
 data MyAmbiguity = MyAmbiguity deriving ( Read, Show )
 
@@ -91,6 +93,7 @@ myAdditionalKeys _ =
     [ ( ( myModMask, xK_Return ), promote )
     , ( ( myModMask, xK_BackSpace ), focusUrgent )
     , ( ( myModMask, xK_s ), sendMessage $ SwapWindow )
+    , ( ( myModMask, xK_f ), sendMessage $ Toggle FULL )
     ] ++ M.assocs ( planeKeys myModMask ( Lines 3 ) Finite )
 
 myRemoveKeys _ =
