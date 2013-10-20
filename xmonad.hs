@@ -48,24 +48,6 @@ myManageHook = composeAll $ []
         ignores = [ "Synapse" ]
         shifts  = [ ( "crx_nckgahadagoaajjgafhacjanaoiihapd", "Comm" ) ]
 
--- LogHook --
-
-fadeWhiteList = [ className =? "URxvt"
-                , className =? "Pidgin"
-                ]
-
-fadeRules :: Query Rational
-fadeRules = do
-    whitelisted <- foldl1 ( liftM2 (||) ) fadeWhiteList
-    fullscreen <- isFullscreen
-    unfocused <- isUnfocused
-    return $ case () of _ | not whitelisted || fullscreen -> 1
-                          | not unfocused -> 0.95
-                          | otherwise -> 0.9
-
-myLogHook = do
-    fadeOutLogHook fadeRules
-
 -- Workspaces & Layouts --
 myWorkspaces = [ "Web", "Comm"
                , "Web2", "Code"
@@ -125,6 +107,5 @@ main = do
         , keys = customKeysFrom kde4Config myRemoveKeys myAdditionalKeys
         , layoutHook = myLayoutHook
         , manageHook = myManageHook <+> manageHook kde4Config
-        , logHook = myLogHook >> logHook kde4Config
         , handleEventHook = fullscreenEventHook <+> handleEventHook kde4Config
         }
