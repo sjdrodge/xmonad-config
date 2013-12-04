@@ -53,7 +53,7 @@ myWebLayouts = Tall { tallNMaster = 1
 
 myCommLayouts = named "Comm"
     $ reflectHoriz $ withIM ( 0.20 ) ( ClassName "Google-chrome-stable" `And` Title "Hangouts" )
-    $ combineTwoP ( reflectVert $ Mirror $ TwoPane 0.01 0.45) Grid Grid ( Resource "crx_nckgahadagoaajjgafhacjanaoiihapd" )
+    $ combineTwoP ( reflectVert $ Mirror $ TwoPane 0.01 0.45) (Mirror Accordion) Grid ( Resource "crx_nckgahadagoaajjgafhacjanaoiihapd" )
 --    ( Mirror $ myWebLayouts { tallRatio = 0.55 } )
 
 myCodeLayouts = named "Code" $ reflectHoriz ( FixedColumn 1 1 80 6 )
