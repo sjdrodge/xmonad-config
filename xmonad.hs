@@ -3,7 +3,7 @@ import qualified Data.Map as M
 import Data.Maybe ( fromJust )
 
 import XMonad
-import XMonad.Actions.Plane ( planeKeys, Lines ( Lines ), Limits ( Finite ) )
+import XMonad.Actions.Plane
 import XMonad.Actions.Promote ( promote )
 import XMonad.Config.Desktop ( desktopLayoutModifiers )
 import XMonad.Config.Kde ( kde4Config )
@@ -83,10 +83,14 @@ myLayoutHook = lessBorders MyAmbiguity $ fullscreenFull $ desktopLayoutModifiers
 myModMask = mod4Mask
 
 myAdditionalKeys _ =
-    [ ( ( myModMask, xK_Return ), promote )
-    , ( ( myModMask, xK_BackSpace ), focusUrgent )
-    , ( ( myModMask, xK_s ), sendMessage $ SwapWindow )
-    , ( ( myModMask, xK_f ), sendMessage $ Toggle FULL )
+    [ ( ( myModMask               , xK_Return    ), promote )
+    , ( ( myModMask               , xK_BackSpace ), focusUrgent )
+    , ( ( myModMask               , xK_s         ), sendMessage $ SwapWindow )
+    , ( ( myModMask               , xK_f         ), sendMessage $ Toggle FULL )
+    , ( ( myModMask               , xK_n         ), planeMove ( Lines 3 ) Finite ToRight )
+    , ( ( myModMask .|. shiftMask , xK_n         ), planeShift ( Lines 3 ) Finite ToRight )
+    , ( ( myModMask               , xK_p         ), planeMove ( Lines 3 ) Finite ToLeft )
+    , ( ( myModMask .|. shiftMask , xK_p         ), planeShift ( Lines 3 ) Finite ToLeft )
     ] ++ M.assocs ( planeKeys myModMask ( Lines 3 ) Finite )
 
 myRemoveKeys _ =
