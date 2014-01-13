@@ -25,6 +25,11 @@ import XMonad.Layout.Spacing ( spacing )
 import XMonad.Layout.TwoPane
 import XMonad.Util.CustomKeys ( customKeysFrom )
 
+-- Borders --
+myNormalBorderColor  = "#DDDDDD"
+myFocusedBorderColor = "#3366CC"
+myBorderWidth        = 1
+
 -- Terminal --
 myTerminal = "konsole"
 
@@ -60,7 +65,7 @@ myCodeLayouts = named "Code" $ reflectHoriz ( FixedColumn 1 1 80 6 )
 
 myMiscLayouts = myWebLayouts ||| Grid
 
-myLayouts = mkToggle (single FULL) $ nameTail $ nameTail $ spacing 3 $
+myLayouts = mkToggle (single FULL) $ nameTail $ nameTail $ spacing 4 $
     ( onWorkspaces [ "Web", "Web2" ] myWebLayouts
     $ onWorkspace "Comm" myCommLayouts
     $ onWorkspace "Code" myCodeLayouts
@@ -100,6 +105,9 @@ myRemoveKeys _ =
 main = do
     xmonad $ withUrgencyHook NoUrgencyHook $ kde4Config
         { terminal = myTerminal
+        , normalBorderColor = myNormalBorderColor
+        , focusedBorderColor = myFocusedBorderColor
+        , borderWidth = myBorderWidth
         , workspaces = myWorkspaces
         , modMask = myModMask
         , keys = customKeysFrom kde4Config myRemoveKeys myAdditionalKeys
