@@ -26,8 +26,8 @@ import XMonad.Layout.TwoPane
 import XMonad.Util.CustomKeys ( customKeysFrom )
 
 -- Borders --
-myNormalBorderColor  = "#3366CC"
-myFocusedBorderColor = "#6699EE"
+myNormalBorderColor  = "#0066CC"
+myFocusedBorderColor = "#CC9933"
 myBorderWidth        = 2
 
 -- Terminal --
