@@ -24,6 +24,8 @@ import XMonad.Layout.Spacing ( spacing )
 import XMonad.Layout.TwoPane
 import XMonad.Util.CustomKeys ( customKeysFrom )
 
+import System.Taffybar.Hooks.PagerHints ( pagerHints )
+
 -- Borders --
 myNormalBorderColor  = "#0066CC"
 myFocusedBorderColor = "#CC9933"
@@ -102,7 +104,7 @@ myRemoveKeys _ =
 
 -- Apply settings --
 main = do
-    xmonad $ withUrgencyHook NoUrgencyHook $ desktopConfig
+    xmonad $ withUrgencyHook NoUrgencyHook $ pagerHints $ desktopConfig
         { terminal = myTerminal
         , normalBorderColor = myNormalBorderColor
         , focusedBorderColor = myFocusedBorderColor
