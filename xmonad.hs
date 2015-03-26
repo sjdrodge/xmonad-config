@@ -5,8 +5,7 @@ import Data.Maybe ( fromJust )
 import XMonad
 import XMonad.Actions.Plane
 import XMonad.Actions.Promote ( promote )
-import XMonad.Config.Desktop ( desktopLayoutModifiers )
-import XMonad.Config.Kde ( kde4Config )
+import XMonad.Config.Desktop ( desktopConfig, desktopLayoutModifiers )
 import XMonad.Hooks.ManageHelpers ( transience' )
 import XMonad.Hooks.UrgencyHook ( focusUrgent, withUrgencyHook, NoUrgencyHook ( .. ) )
 import XMonad.Layout.Accordion
@@ -103,15 +102,15 @@ myRemoveKeys _ =
 
 -- Apply settings --
 main = do
-    xmonad $ withUrgencyHook NoUrgencyHook $ kde4Config
+    xmonad $ withUrgencyHook NoUrgencyHook $ desktopConfig
         { terminal = myTerminal
         , normalBorderColor = myNormalBorderColor
         , focusedBorderColor = myFocusedBorderColor
         , borderWidth = myBorderWidth
         , workspaces = myWorkspaces
         , modMask = myModMask
-        , keys = customKeysFrom kde4Config myRemoveKeys myAdditionalKeys
+        , keys = customKeysFrom desktopConfig myRemoveKeys myAdditionalKeys
         , layoutHook = myLayoutHook
-        , manageHook = myManageHook <+> manageHook kde4Config
-        , handleEventHook = fullscreenEventHook <+> handleEventHook kde4Config
+        , manageHook = myManageHook <+> manageHook desktopConfig
+        , handleEventHook = fullscreenEventHook <+> handleEventHook desktopConfig
         }
